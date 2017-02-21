@@ -24,14 +24,11 @@ require(['avalon', "domReady!"], function() {//第二块，添加根VM（处理�
     avalon.config({
         loader: false
     });
-    avalon.templateCache = {
-        empty: "&nbsp;"
-    };
     avalon.define({
         $id: "root",
         header: "这是根模块，用于放置其他模块都共用的东西，比如<b>用户名</b>什么的",
         footer: "页脚消息",
-        page: "empty"
+        page: ""
     });
     avalon.scan(document.body);
     

@@ -13,8 +13,10 @@
             
     </head>
     <body ms-controller="root">
-        <div>{{header | html}}</div>
-        <div ms-include-src="page"></div>
+        <!--2.x已取消html过滤器了，查看avalon.filters-->
+        <!--div>{{header | html}}</div-->
+        <div ms-html="header"></div>
+        <div ms-html="page"></div>
         <div>{{footer}}</div>
     </body>
 </html>

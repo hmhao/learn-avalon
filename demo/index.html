@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap-responsive.css">
         <script src="vendor/require/require.js"></script>
         <script src="require.config.js"></script>
     </head>
@@ -16,15 +17,22 @@
                 </div>
             </div>
         </div>
-        <div class='pull-left'>
-            <ul class="nav nav-list">
-                <li class="nav-header">章节：</li>
-                <li :for="(nav, title) in @navs" :class="@selected==nav && 'active'">
-                    <a href="javascript:void(0)" :click="@router(nav)" :text="title"></a>
-                </li>
-            </ul>
+        <div class="row">
+            <div class="span3">
+                <ul class="nav nav-list">
+                    <li class="nav-header">章节：</li>
+                    <li :for="(nav, title) in @navs" :class="@selected==nav && 'active'">
+                        <a href="javascript:void(0)" :click="@router(nav)" :text="title"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span10">
+                <div class="row">
+                    <div class='span5'><pre class="prettyprint" :html="@code"></pre></div>
+                    <div class='span5' :html="@page"></div>
+                </div>
+            </div>
         </div>
-        <div class='span' :html="@page"></div>
         <div :text="@footer"></div>
         <script type="text/javascript" src="main.js"></script>
     </body>

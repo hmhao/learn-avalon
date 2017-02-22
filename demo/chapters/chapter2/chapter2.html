@@ -1,0 +1,19 @@
+<div ms-controller="chapter2">
+    <p>First name: <input ms-duplex="@firstName" /></p>
+    <p>Last name: <input ms-duplex="@lastName"  /></p>
+    <p>Hello,    <input ms-duplex="@fullName"></p>
+    <p>{{firstName +" - "+ lastName }}<span class="label label-info">{{firstMark}}</span></p>
+    <ul class="unstyled">
+        <li>
+            <label class="checkbox">
+                <input type="checkbox" ms-duplex-checked="@allchecked" data-duplex-changed="@checkAll"> 全选
+            </label>
+        </li>
+        <li ms-for="el in data" >
+            <label class="checkbox">
+                <input type="checkbox" ms-duplex-checked="el.checked" data-duplex-changed="@checkOne"/>{{el.label}}
+            </label>
+        </li>
+    </ul>
+    <p>checked num:{{checkedNum}}</p>
+</div>

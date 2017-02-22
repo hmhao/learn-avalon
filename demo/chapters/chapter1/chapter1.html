@@ -1,0 +1,6 @@
+<div ms-controller="chapter1">
+    <input ms-duplex="username"/>{{username}}
+    <ul>
+        <li ms-for="($index,el) in @array">{{$index}}--{{el}}</li>
+    </ul>
+</div>

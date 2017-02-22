@@ -1,39 +1,21 @@
-require.config({//第一块，配置
-    baseUrl: '',
-    paths: {
-        jquery: 'vendor/jquery/jquery',
-        avalon: "vendor/avalon/avalon",//必须修改源码，禁用自带加载器，或直接删提AMD加载器模块
-        text: 'vendor/require/text',
-        domReady: 'vendor/require/domReady',
-        css: 'vendor/require/css.js'
-    },
-    priority: ['text', 'css'],
-    shim: {
-        jquery: {
-            exports: "jQuery"
-        },
-        avalon: {
-            exports: "avalon"
-        }
-    }
-});
-
-
-require(['avalon', "domReady!"], function() {//第二块，添加根VM（处理共用部分）
-    avalon.log("加载avalon完毕，开始构建根VM与加载其他模块");
-    avalon.config({
-        loader: false
-    });
+require(['avalon', "domReady!"], function() {
     avalon.define({
-        $id: "root",
-        header: "这是根模块，用于放置其他模块都共用的东西，比如<b>用户名</b>什么的",
-        footer: "页脚消息",
-        page: ""
+        $id: 'root',
+        header: 'Avalon2学习',
+        footer: '',
+        navs: {
+            chapter1:'初体验',
+            chapter2:'模块化、ViewModel、作用域',
+        },
+        selected:'',
+        page:'',
+        router: function (chapter) {
+            require(['./chapters/' + chapter + '/'+ chapter + '.js'], function() {//第三块，加载其他模块
+                avalon.log(chapter + '加载其他完毕');
+            });
+            this.selected = chapter;
+        }
     });
     avalon.scan(document.body);
-    
-    require(['./modules/aaa/aaa'], function() {//第三块，加载其他模块
-        avalon.log("加载其他完毕");
-    });
-    
+    avalon.vmodels.root.router('chapter1');
 });

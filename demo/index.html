@@ -4,19 +4,28 @@
         <title>第一个avalon项目</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="vendor/require/require.js" data-main="main.js"></script>
-        <style>
-            .ms-controller{
-                visibility: hidden;
-            }
-        </style>
-            
+        <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap.css">
+        <script src="vendor/require/require.js"></script>
+        <script src="require.config.js"></script>
     </head>
-    <body ms-controller="root">
-        <!--2.x已取消html过滤器了，查看avalon.filters-->
-        <!--div>{{header | html}}</div-->
-        <div ms-html="header"></div>
-        <div ms-html="page"></div>
-        <div>{{footer}}</div>
+    <body :controller="root">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="javascript:void(0)" :text="@header"></a>
+                </div>
+            </div>
+        </div>
+        <div class='pull-left'>
+            <ul class="nav nav-list">
+                <li class="nav-header">章节：</li>
+                <li :for="(nav, title) in @navs" :class="@selected==nav && 'active'">
+                    <a href="javascript:void(0)" :click="@router(nav)" :text="title"></a>
+                </li>
+            </ul>
+        </div>
+        <div class='span' :html="@page"></div>
+        <div :text="@footer"></div>
+        <script type="text/javascript" src="main.js"></script>
     </body>
 </html>

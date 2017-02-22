@@ -1,32 +1,43 @@
-<div ms-controller="chapter2">
-    <p>First name: <input ms-duplex="@firstName" /></p>
-    <p>Last name: <input ms-duplex="@lastName"  /></p>
-    <p>Hello,    <input ms-duplex="@fullName"></p>
-    <p>{{firstName +" - "+ lastName }}<span class="label label-info">{{firstMark}}</span></p>
-    <ul class="unstyled">
-        <li>
-            <label class="checkbox">
-                <input type="checkbox" ms-duplex-checked="@allchecked" data-duplex-changed="@checkAll"> 全选
-            </label>
-        </li>
-        <li ms-for="el in data" >
-            <label class="checkbox">
-                <input type="checkbox" ms-duplex-checked="el.checked" data-duplex-changed="@checkOne"/>{{el.label}}
-            </label>
-        </li>
-    </ul>
-    <p>checked num:{{checkedNum}}</p>
-</div>
-作用域
-<div ms-controller="chapter2-a">
-    <div :css="{background:@color}">{{name}} :  {{color}}</div>
-    <div ms-controller="chapter2-b">
-        <div :css="{background:@color}">{{name}} :  {{color}}</div>
-        <div ms-controller="chapter2-c">
-            <div :css="{background:@color}">{{name}} :  {{color}}</div>
+<table class="table table-striped" ms-controller="chapter2">
+    <tr><td>
+        <h5>内部属性</h5>
+        <ul>
+            <li>$id, vm的名字</li>
+            <li>$watch, 用于添加监听函数</li>
+            <li>$fire, 用于触发监听函数</li>
+            <li>$events, 用于储存监听函数</li>
+            <li>$model, 返回一个纯净的JS对象</li>
+            <li>$element, 当用ms-controller, ms-important指定一个VM的作用域,对应元素节点会放到这个属性上</li>
+            <li>$computed, 用来集中定义计算属性</li>
+        </ul>
+    </td></tr>
+    <tr><td>
+        <h5>监控属性</h5>
+        <p>a = {{a}}</p>
+        <p>$watch监听：{{aa}}</p>
+        <div>b: {
+            <ul class="unstyled">
+                <li :for="($k, $v) in b">&nbsp;&nbsp;&nbsp;&nbsp;{{$k}}:{{$v}}</li>
+            </ul>}
         </div>
-        <div ms-important="chapter2-d">
-            <div :css="{background:@color}">{{name}} :  {{color}}</div>
+    </td></tr>
+    <tr><td>
+        <h5>计算属性</h5>
+        <p>first：{{first}}</p>
+        <p>last：{{last}}</p>
+        <p>full：{{full}}</p>
+    </td></tr>
+    <tr><td>
+        <h5>监控数组</h5>
+        <div>
+            <button :click="@arr.push(Math.ceil(Math.random()*10))">push</button>
+            <button :click="@arr.pushArray([4,5,6])">pushArray [4,5,6]</button>
+            <button :click="@arr.ensure(3)">ensure(3)</button>
+            <button :click="@arr.removeAt(1)">removeAt(1)</button>
+            <button :click="@arr.clear()">clear</button>
+            <ul ms-for="el in @arr">
+                <li>{{el}}<button type="button" class="btn btn-mini btn-primary" ms-click="@arr.remove(el)">remove</button></li>
+            </ul>
         </div>
-    </div>
-</div>
+    </td></tr>
+</table>

@@ -1,11 +1,12 @@
 require(['avalon', "domReady!"], function() {
     var model = avalon.define({
         $id: 'root',
+        $templateCache:{},
         header: 'Avalon2学习',
         footer: '',
         navs: {
             chapter1:'初体验',
-            chapter2:'模块化、ViewModel、作用域',
+            chapter2:'vm',
         },
         selected:'',
         code: '',
@@ -16,6 +17,7 @@ require(['avalon', "domReady!"], function() {
             require(['text!'+url, url], function(code) {//第三块，加载其他模块
                 avalon.log(chapter + '加载其他完毕');
                 model.code = code;
+                model.page = model.$templateCache[chapter];
             });
         }
     });

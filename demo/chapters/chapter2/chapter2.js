@@ -1,5 +1,5 @@
 define(['avalon', 'text!./chapter2.html'], function(avalon, tpl) {
-    var model = avalon.define({
+    avalon.define({
         $id: 'chapter2',
         firstName: '司徒',
         lastName: '正美',
@@ -47,5 +47,25 @@ define(['avalon', 'text!./chapter2.html'], function(avalon, tpl) {
         },
         checkedNum: 0
     });
+
+    avalon.define({
+        $id: "chapter2-a",
+        name: "liger",
+        color: "green"
+    });
+    avalon.define({
+        $id: "chapter2-b",
+        name: "sphinx",
+        color: "red"
+    });
+    avalon.define({
+        $id: "chapter2-c",
+        name: "dragon" //不存在color
+    });
+    avalon.define({
+        $id: "chapter2-d",
+        name: "sirenia" //不存在color
+    });
+
     avalon.vmodels.root.page = tpl;
 });

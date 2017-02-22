@@ -17,3 +17,16 @@
     </ul>
     <p>checked num:{{checkedNum}}</p>
 </div>
+作用域
+<div ms-controller="chapter2-a">
+    <div :css="{background:@color}">{{name}} :  {{color}}</div>
+    <div ms-controller="chapter2-b">
+        <div :css="{background:@color}">{{name}} :  {{color}}</div>
+        <div ms-controller="chapter2-c">
+            <div :css="{background:@color}">{{name}} :  {{color}}</div>
+        </div>
+        <div ms-important="chapter2-d">
+            <div :css="{background:@color}">{{name}} :  {{color}}</div>
+        </div>
+    </div>
+</div>

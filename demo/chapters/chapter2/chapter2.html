@@ -40,4 +40,13 @@
             </ul>
         </div>
     </td></tr>
+    <tr><td>
+        <h5>数据模型</h5>
+        <p>VM中的$model属性，它是一个纯净的javascript对象，去掉$id, $watch等方法或属性</p>
+        <p>但是在directive中的VM（directive scope，可能是mixed VM）则不是</p>
+        <!--p>$track：{{$track}}</p-->
+        <ul>
+            <li :for="(k, v) in $model">{{k}}：{{v}}</li>
+        </ul>
+    </td></tr>
 </table>

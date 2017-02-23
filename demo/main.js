@@ -7,6 +7,7 @@ require(['avalon', "domReady!"], function() {
         navs: {
             chapter1:'初体验',
             chapter2:'vm',
+            chapter3:'指令',
         },
         selected:'',
         code: '',
@@ -22,5 +23,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter2');
+    model.router('chapter3');
 });

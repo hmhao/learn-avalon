@@ -1,0 +1,75 @@
+<table class="table table-striped" ms-controller="chapter3">
+    <tr><td>
+        <h5>属性操作ms-attr</h5>
+        <div ms-attr="{a:@attrA, b:@attrB+11, c: @fn(@attrC,@attrD)}">
+            <p><strong>使用对象字面量：</strong>ms-attr="{a:@attrA, b:@attrB+11, c: @fn(@attrC,@attrD)}"</p>
+        </div>
+        <div ms-attr="@attrObj">
+            <p><strong>直接引用对象：</strong>ms-attr="@attrObj"</p>
+        </div>
+        <div
+              ms-attr='{title: @title}'
+                >{{
+            @title ? @title: 'empty'
+            }}<input ms-duplex="@title"/>
+        </div>
+        <p :attr="[@attrObj, @toggle && @active ]" :click="@toggle = !@toggle">选择性添加多余属性或重写已有属性</p>
+    </td></tr>
+    <tr><td>
+        <h5>样式操作ms-css</h5>
+        <div ms-css="@cssObj">直接引用对象</div>
+        使用对象字面量
+        <div class="alert alert-error">
+            <strong>Error </strong> ms-css="{font-size: @fs}"
+        </div>
+        <div class="alert alert-success">
+            <h5>Right</h5>
+            <p>ms-css="{fontSize: @fs}"</p>
+            <p>ms-css="{'font-size': @fs}"</p>
+            <p>
+                <span ms-css="{fontSize: @fs}">Size</span>
+                <a class="btn btn-mini" href="javascript:void(0)" :click="@fs++"><i class="icon-plus"></i></a>
+                <a class="btn btn-mini" href="javascript:void(0)" :click="@fs>12 && @fs--"><i class="icon-minus"></i></a>
+            </p>
+        </div>
+        <style>
+            .handerx{
+                width:20px;
+                height:20px;
+                position: absolute;
+                color:#fff;
+                background: #000;
+            }
+            .sliderx{
+                width:100%;
+                height:20px;
+                position: relative;
+            }
+        </style>
+        <div class="slider" style="background:red;position: relative;">
+            <div class="handerx" ms-css="{left: @percent+'%'}" >{{ @percent }}</div>
+            <div style="background: greenyellow;height:20px" ms-css="{width:@percent+'%'}"></div>
+        </div>
+        <div class="sliderx" style="background:#d2d2d2;">
+            <div style="background: #2FECDC;height:20px" ms-css="{width:100-@percent+'%'}"></div>
+        </div>
+        <div>
+            <p>需要注意的是 设置背景图片是比较复杂</p>
+            <p>:for="img in @imgs" :css="{background: 'url('+img+') no-repeat center center'}"</p>
+            <!--ms-for: (i, img) in @imgs-->
+                <a class="btn btn-mini" href="javascript:void(0)" :click="@fs++"><i class="con-search"></i>{{img.show?'hide':'show'}}</a>
+                <div :css="{background: 'url('+img.url+') no-repeat center center', width:'100%', height:300}"></div>
+            <!--ms-for-end:-->
+        </div>
+    </td></tr>
+    <tr><td>
+        <h5>类名处理ms-class</h5>
+    </td></tr>
+    <tr><td>
+        <h5>监控数组</h5>
+    </td></tr>
+    <tr><td>
+        <h5>数据模型</h5>
+
+    </td></tr>
+</table>

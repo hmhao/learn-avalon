@@ -7,7 +7,9 @@ require(['avalon', "domReady!"], function() {
         navs: {
             chapter1:'初体验',
             chapter2:'vm',
-            chapter3:'指令',
+            chapter3:'attr | css | visible',
+            chapter4:'class | active | hover',
+            chapter5:'if | for',
         },
         selected:'',
         code: '',

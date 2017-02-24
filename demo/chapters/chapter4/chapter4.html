@@ -1,0 +1,41 @@
+<table class="table table-striped" ms-controller="chapter4">
+    <tr><td>
+        <h5>类名处理ms-class</h5>
+        <div>
+            <p><a href="javascript:void(0)" :class="@classA">直接引用字符串:class="@classA"</a></p>
+            <p><a href="javascript:void(0)" :class="@classB">直接引用数组:class="@classB"</a></p>
+            <p><a href="javascript:void(0)" :class="[@classA, @classC]">使用数组字面量:class="[@classA, @classC]"</a></p>
+            <p>
+                <a href="javascript:void(0)"
+                   :class="['btn', 'btn-info',(@classToggle? 'btn-mini':'btn-large')]">
+                    选择性添加类名:class="['btn', 'btn-info',(@classToggle? 'btn-mini':'btn-large')]"</a>
+            </p>
+            <p><a href="javascript:void(0)" :class="[ 'btn', 'btn-'+ @classD]">动态生成类名:class="[ 'btn', 'btn-'+ @classD]"</a></p>
+            <a class="btn btn-large" href="javascript:void(0)"
+               :class="{'btn-success':@classToggle}"
+               :click="@classD=(@classToggle?'warning':'inverse'), @classToggle = !@classToggle">点我</a>
+        </div>
+    </td></tr>
+    <tr><td>
+        <h5>active处理和hover处理</h5>用法类似于类名处理
+        <style>
+            table.my-table tr.active1 td{
+                font-weight: bolder;
+            }
+            table.my-table tr td.active2{
+                font-size: 24px;
+            }
+        </style>
+        <table class="table table-bordered my-table">
+            <tr ms-for="(i, el) in @array" ms-class="{warning: i % 2 == 0}"
+                ms-hover="'info'" ms-active="'active1'">
+                <!--
+                    ms-active只是ms-class的扩展不是ms-on，因此没有函数处理以及冒泡，故只能加在target对象上。
+                    上面加在tr的ms-active是没效果的
+                 -->
+                <td  ms-active="'active2'">{{i}}</td>
+                <td>{{ new Date - 0 | date("yyyy-MM-dd")}}</td>
+            </tr>
+        </table>
+    </td></tr>
+</table>

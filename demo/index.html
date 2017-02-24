@@ -9,7 +9,7 @@
         <script src="vendor/require/require.js"></script>
         <script src="require.config.js"></script>
     </head>
-    <body :controller="root">
+    <body :controller="root" class="container">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <div class="container">
@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="span3">
+            <div class="span2">
                 <ul class="nav nav-list">
                     <li class="nav-header">章节：</li>
                     <li :for="(nav, title) in @navs" :class="@selected==nav && 'active'">
@@ -26,16 +26,16 @@
                     </li>
                 </ul>
             </div>
-            <div class="span11">
+            <div class="span10">
                 <div class="row">
-                    <div class='span6'>
+                    <div class="span5">
                         <pre class="prettyprint linenums">
                             <ol class="linenums">
                                 <li :for="($index, line) in @code.split('\n')" :class="['L'+$index]">{{line}}</li>
                             </ol>
                         </pre>
                     </div>
-                    <div class='span5' :html="@page"></div>
+                    <div class="span5" :html="@page"></div>
                 </div>
             </div>
         </div>

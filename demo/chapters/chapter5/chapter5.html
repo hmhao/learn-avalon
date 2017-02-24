@@ -1,0 +1,30 @@
+<table class="table table-striped" ms-controller="chapter5">
+    <tr><td>
+        <h5>if处理ms-if</h5>
+        <div>
+            <div><button ms-for='(i, el) in @buttons' ms-click='@curIndex = i'>{{el}}</button></div>
+            <div class='panel' ms-for='(j, el) in @panels' ms-if='j === @curIndex' ms-html='el'></div>
+        </div>
+    </td></tr>
+    <tr><td>
+        <h5>for处理</h5>
+        <ul>
+            <li ms-for="el in @array | limitBy(@limit) | orderBy(null, @order) as items"
+                data-for-rendered='@dataForRendered'>{{el}}::{{items.length}}</li>
+        </ul>
+        <p>可用于ms-for中的过滤器有limitBy, filterBy, selectby, orderBy</p>
+        <p>limitBy：<input ms-duplex-number="@limit"/></p>
+        <p>orderBy：<input ms-duplex="@order"/></p>
+        <h6>array的元素里面有子数组,形成2维数组</h6>
+        <table class="table table-bordered">
+            <tr ms-for="($index, el) in @array2">
+                <td ms-for="elem in el.arr">{{elem}}  它位于第<b class="text-error">{{$index}}</b>行</td>
+            </tr>
+        </table>
+        <h6>双向绑定ms-for中生成的变量</h6>
+        <div ms-for="(key,el) in @styles">
+            <label>{{ key }}::{{ el }}</label>
+            <input type="text" ms-duplex="el">
+        </div>
+    </td></tr>
+</table>

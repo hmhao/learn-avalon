@@ -25,5 +25,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter3');
+    model.router('chapter5');
 });

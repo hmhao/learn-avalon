@@ -12,7 +12,7 @@ define(['avalon', 'text!./chapter3.html'], function(avalon, tpl) {
         'attrObj': {title: '普通对象', algin: 'left'},
         title:'',
         active: {title: '激活'},
-        toggle: false,
+        attrToggle: false,
         //ms-style
         fs: 24,
         cssObj: {backgroundColor: '#3bb0d0',width:300, height:50, 'text-align': 'center'},//属性名带-,必须用引号括起
@@ -24,6 +24,14 @@ define(['avalon', 'text!./chapter3.html'], function(avalon, tpl) {
             url:'./chapters/chapter3/directives2.jpg',
             show:false
         }],
+        //ms-class
+        classA: 'btn btn-primary',
+        classB: ['btn', 'btn-info'],
+        classC: 'btn-small',
+        classD: 'inverse',
+        classToggle: true,
+        //ms-active和ms-hover
+        array: avalon.range(0, 14),
     });
 
     var interval = new function (vm) {

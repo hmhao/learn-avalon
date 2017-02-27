@@ -25,6 +25,17 @@
         <div ms-for="(key,el) in @styles">
             <label>{{ key }}::{{ el }}</label>
             <input type="text" ms-duplex="el">
+            <!--现在可以直接用el做双向绑定了-->
         </div>
+        <h6>大表格渲染</h6>
+        <p class="text-info">{{renderTime}}ms</p>
+        <table class="table table-bordered">
+            <tr><th ms-for="el in @header">{{el}}</th></tr>
+            <tr ms-for="tr in @list">
+                <td ms-for="td in tr | selectBy(['name','age','sex'])"
+                    ms-attr="{align:td === 'age' ?'left':'right'}">{{td}}</td>
+                <!-- html中的selectBy参数不能使用双引号必须使用单引号，否则会报错 -->
+            </tr>
+        </table>
     </td></tr>
 </table>

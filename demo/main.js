@@ -10,6 +10,7 @@ require(['avalon', "domReady!"], function() {
             chapter3:'attr | css | visible',
             chapter4:'class | active | hover',
             chapter5:'if | for',
+            chapter6:'on',
         },
         selected:'',
         code: '',
@@ -25,5 +26,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter5');
+    model.router('chapter6');
 });

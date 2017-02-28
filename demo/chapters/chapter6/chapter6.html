@@ -1,0 +1,44 @@
+<table class="table table-striped" ms-controller="chapter6">
+    <tr><td>
+        <h5>事件绑定ms-on</h5>
+        <h6>默认回调传参</h6>
+        <div ms-mouseenter="@hover" ms-mouseleave="@hover">鼠标停留和离开这里：{{@hoverStatus}}<br/>
+            <input ms-on-input="@inputcheck"/>{{@inputField}}
+        </div>
+        <h6>自定义回调传参</h6>
+        <button class="btn btn-info" ms-click="@customClick($event, 100, @firstName)">点我</button>
+        ms-click="@customClick($event, 100, @firstName)"
+        <div ms-for="el in @array" >
+            <a href="javascript:void(0)" ms-click="@loopClick(el, $event)">{{el}}</a>
+        </div>
+        <h6>表达式</h6>
+        <button ms-class="['btn', 'btn-'+(@isError ? 'danger' : 'success')]"
+                ms-click="@isError = !@isError">点击改变
+        </button>
+        ms-click="@isError = !@isError"
+        <h6>一个元素绑定多个同种事件的回调</h6>
+        <button class="btn btn-inverse" ms-click="@click0"
+                ms-click-1="@click1" ms-click-2="@click2">点击
+        </button>
+        ms-click="@click0" ms-click-1="@click1" ms-click-2="@click2"
+        <div>{{@str1}}</div>
+        <div>{{@str2}}</div>
+        <div>{{@str3}}</div>
+        <h6>回调执行顺序：以序号排序</h6>
+        <div ms-on-mouseenter-3="@cb"
+             ms-on-mouseenter-2="@cb1"
+             ms-on-mouseenter-1="@cb2"
+             ms-on-mouseleave="@cbStatus = ''"
+             style="width:100%;height:80px;background: greenyellow;">
+            ms-on-mouseenter-3="@cb"<br>
+            ms-on-mouseenter-2="@cb1"<br>
+            ms-on-mouseenter-1="@cb2"<br>
+            &nbsp;回调顺序：{{@cbStatus}}
+        </div>
+        <h6>mousewheel事件</h6>
+        <div ms-on-mousewheel="@onMousewheel"
+             style="background: #1ba9ba;width:100%;height: 200px;">
+            {{@wheelText}}
+        </div>
+    </td></tr>
+</table>

@@ -1,0 +1,65 @@
+<table class="table table-striped" ms-controller="chapter7">
+    <tr><td>
+        <h5>双工绑定ms-duplex</h5>
+        <table class="table table-bordered">
+            <thead><td>控件</td><td>触发时机</td><td>数据</td></thead>
+            <tr><td>text,password,textarea及可编辑元表</td><td>oninput,onchange, debounce</td><td>简单数据</td></tr>
+            <tr><td>radio,checkbox</td><td>onclick</td><td>简单数据或数组</td></tr>
+            <tr><td>select</td><td>onchange</td><td>简单数据或数组</td></tr>
+        </table>
+    </td></tr>
+    <tr><td>
+        <h6>默认是绑定oninput事件, 每为控件敲入一个字符, 后面的文本都会立即变化</h6>
+        <p><input ms-duplex="@textInput"/>{{@textInput}}</p>
+        <p><input ms-duplex="@passwordInput" type="password"/>{{@passwordInput}}</p>
+        <p><textarea ms-duplex="@textareaInput"/>{{@textareaInput}}</p>
+        <h6>控件全部输入好, 失去焦点时才同步</h6>
+        <p><textarea ms-duplex="@textareaInput | change"/>{{@textareaInput}}</p>
+        <h6>控件智能变化, 使用debounce过滤器</h6>
+        <p><input ms-duplex="@passwordInput | debounce(1000)" type="password"/>{{@passwordInput}}</p>
+        <h6>可编辑元素的用法与过滤器与上面三种控件一样</h6>
+        <p><div contenteditable="true" ms-duplex="@textInput | debounce(300)"></div>{{@textInput}}</p>
+    </td></tr>
+    <tr><td>
+        <h5>radio：简单数据,字符串,数字或布尔. checkbox：简单数据数组</h5>
+        <input type="radio" value="11"  ms-duplex="@radio"/>
+        <input type="radio" value="22"  ms-duplex="@radio"/>
+        <input type="radio" value="33"  ms-duplex="@radio"/>
+        <input type="checkbox" value="11"  ms-duplex="@checkbox"/>
+        <input type="checkbox" value="22"  ms-duplex="@checkbox"/>
+        <input type="checkbox" value="33"  ms-duplex="@checkbox"/>
+        <p>radio: {{@radio}}; checkbox:{{@checkbox}}</p>
+        <h5>ms-duplex-checked转换器</h5>
+        <input type="radio"  ms-duplex-checked="@radio2"/>
+        <input type="checkbox"  ms-duplex-checked="@checkbox2"/>
+        <p>radio: {{@radio2}}; checkbox:{{@checkbox2}}</p>
+    </td></tr>
+    <tr><td>
+        <h5>select：简单数据,字符串,数字或布尔. multiple select：简单数据数组</h5>
+        <select :duplex="@select1">
+            <option>aaa</option><option>bbb</option><option>ccc</option>
+        </select>
+        <select multiple="true" :duplex="@select2">
+            <option>aaa</option><option>bbb</option><option>ccc</option>
+        </select>
+        <p>select: {{@select1}}; multiple select:{{@select2}}</p>
+    </td></tr>
+    <tr><td>
+        <h5>简单的表格排序</h5>
+        <select ms-duplex="@selected">
+            <option  ms-for="el in @options">{{el}}</option>
+        </select>
+        <select ms-duplex-number="@trend">
+            <option value="1">up</option>
+            <option value="-1">down</option>
+        </select>
+        <table class="table table-bordered">
+            <thead>
+                <td ms-for="el in @options">{{el}}</td>
+            </thead>
+            <tr ms-for="el in @data | orderBy(@selected, @trend)">
+                <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
+            </tr>
+        </table>
+    </td></tr>
+</table>

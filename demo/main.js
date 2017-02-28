@@ -1,3 +1,9 @@
+if (!Date.now) {//fix 旧式IE
+    Date.now = function() {
+        return new Date - 0;
+    }
+}
+
 require(['avalon', "domReady!"], function() {
     var model = avalon.define({
         $id: 'root',
@@ -11,6 +17,7 @@ require(['avalon', "domReady!"], function() {
             chapter4:'class | active | hover',
             chapter5:'if | for',
             chapter6:'on',
+            chapter7:'duplex',
         },
         selected:'',
         code: '',
@@ -26,5 +33,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter6');
+    model.router('chapter7');
 });

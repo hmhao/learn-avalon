@@ -3,6 +3,7 @@
     <p>Last name: <input ms-duplex="@lastName"  /></p>
     <p>Hello,    <input ms-duplex="@fullName"></p>
     <p>{{firstName +" - "+ lastName }}<span class="label label-info">{{firstMark}}</span></p>
+    <h5>全选与非全选</h5>
     <ul class="unstyled">
         <li>
             <label class="checkbox">
@@ -16,6 +17,18 @@
         </li>
     </ul>
     <p>checked num:{{checkedNum}}</p>
+
+    <h5>下拉框三级联动</h5>
+    <select ms-duplex="@firstSelected">
+        <option ms-for="el in @first" ms-attr="{value:el}">{{el}}</option>
+    </select>
+    <select ms-duplex="@secondSelected">
+        <option ms-for="el in @second" ms-attr="{value:el}">{{el}}</option>
+    </select>
+    <select ms-duplex="@thirdSelected">
+        <option ms-for="el in @third" ms-attr="{value:el}">{{el}}</option>
+    </select>
+    <p>select:{{firstSelected}}-{{secondSelected}}-{{thirdSelected}}</p>
 </div>
 作用域
 <div ms-controller="chapter1-a">

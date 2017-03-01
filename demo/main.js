@@ -19,6 +19,8 @@ require(['avalon', "domReady!"], function() {
             chapter6:'on',
             chapter7:'duplex',
             chapter8:'rules | validate',
+            chapter9:'widget',
+            chapter10:'effect',
         },
         selected:'',
         code: '',
@@ -34,5 +36,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter8');
+    model.router('chapter10');
 });

@@ -1,0 +1,78 @@
+<table class="table table-striped" ms-controller="chapter9">
+    <tr><td>
+        <h5>组件ms-widget</h5>
+    </td></tr>
+    <tr><td>
+        <h5>组件容器</h5>
+        <h6>4类标签可以用作组件容器, 分别是wbr, xmp, template, 及ms-开头的自定义标签</h6>
+        <table class="table table-bordered">
+            <tr><th>元素</th><th>类型</th><th>说明</th></tr>
+            <tr><td>wbr</td><td>所有浏览器, 自闭合标签</td><td>需要使用ms-widget或is来指定组件类型</td></tr>
+            <tr><td>xmp</td><td>所有浏览器, 闭合标签</td><td>需要使用ms-widget或is来指定组件类型,里面可以使用slot属性元素</td></tr>
+            <tr><td>template</td><td>IE9+及W3C浏览器,闭合标签</td><td>需要使用ms-widget或is来指定组件类型,里面可以使用slot属性元素</td></tr>
+            <tr><td>ms-*</td><td>IE9+及W3C浏览器,闭合标签</td><td>可以省略ms-widget, 里面可以使用slot属性元素</td></tr>
+        </table>
+        <p class="text-error">根据上表, 如果要兼容IE6-8, 那么只能使用wbr, xmp来做组件容器</p>
+        <p class="text-info">如果不打算支持IE, 那么使用template元素性能最好</p>
+        <p class="text-info">如果追求语义化, 只支持IE9+及其他现代浏览器,则使用ms-*自定义标签.</p>
+        <p class="text-error">xmp元素里面不能放xmp, template元素里面不能放template,这是html规范,就像script元素里面不能放script, textarea元素里面不能放textarea. 但我们可以在这些元素里面直接放ms-*自定义标签.</p>
+        <pre ms-skip>
+&lt;xmp ms-widget="{is:'ms-dialog'}"&gt;
+    &lt;wbr is="ms-star"&gt;
+    &lt;ms-title slot="title"&gt;{{@title}}&lt;/ms-title&gt;
+&lt;/xmp&gt;
+        </pre>
+    </td></tr>
+    <tr><td>
+        <h5>声明使用组件ms-widget="{}"及几种方式</h5>
+        <pre>
+&lt;div ms-widget="{is:'ms-pager'}"&gt;&lt;/div&gt;
+&lt;xmp ms-widget="{is:'ms-pager'}"&gt;&lt;/xmp&gt;
+&lt;template ms-widget="{is:'ms-pager'}"&gt;&lt;/template&gt;
+&lt;xmp is="ms-pager"&gt;&lt;/xmp&gt;
+&lt;template is='ms-pager'&gt;&lt;/template&gt;
+&lt;ms-pager&gt;&lt;/ms-pager&gt;
+        </pre>
+        <h6>ms-widget传入的config对象</h6>
+        <ul>
+            <li>is, 字符串, 指定组件的类型。如果你使用了自定义标签，从标签名就得知组件类型,则可以省略。</li>
+            <li>id, 字符串, 指定组件vm的$id，这是可选项。如果该组件是位于SPA的子页里面，也请务必指定此配置项，能大大提高性能。</li>
+            <li>
+                onInit, onReady, onViewChange, onDispose四大生命周期钩子。
+                <p>onInit，这是组件的vm创建完毕就立即调用时，这时它对应的元素节点或虚拟DOM都不存在。只有当这个组件里面不存在子组件或子组件的构造器都加载回来，那么它才开始创建其虚拟DOM。否则原位置上被一个注释节点占着。</p>
+                <p>onReady，当其虚拟DOM构建完毕，它就生成其真实DOM，并用它插入到DOM树，替换掉那个注释节点。相当于其他框架的attachedCallback， inserted, componentDidMount.</p>
+                <p>onViewChange，当这个组件或其子孙节点的某些属性值或文本内容发生变化，就会触发它。它是比Web Component的attributeChangedCallback更加给力。</p>
+                <p>onDispose，当这个组件的元素被移出DOM树，就会执行此回调，它会移除相应的事件，数据与vmodel。</p>
+            </li>
+        </ul>
+    </td></tr>
+    <tr><td>
+        <h5>静态 | 动态组件</h5>
+        <p>根据is 位置：</p>
+        <p>静态组件 is是预先规定了组件的类型，不可更改</p>
+        <pre>&lt;wbr is="button" ms-widget="@options" /&gt;</pre>
+        <p>动态组件 is是可改变的</p>
+        <pre>&lt;wbr ms-widget="[{is: @is},@options]" /&gt;</pre>
+    </td></tr>
+    <tr><td>
+        <h5>Slot机制</h5>
+        <ms-slot>
+            <div slot="content">这是子视图的内容</div>
+        </ms-slot>
+        <h5>soleSlot机制</h5>
+        <ms-sole-slot></ms-sole-slot>
+        <ms-sole-slot>info</ms-sole-slot>
+    </td></tr>
+    <tr><td>
+        <h5>组件定义</h5>
+        <h6>avalon.component(tagName, config)</h6>
+        <p>config里也有3个配置项</p>
+        <ol>
+            <li>template,自定义标签的outerHTML,它必须是用一个普通的HTML元素节点包起来,里面可以使用ms-*等指令</li>
+            <li>defaults,用来定义这个组件的VM有什么属性与方法</li>
+            <li>soleSlot,表示自定义标签的innerHTML为一个默认的插入点 (或可理解为定义标签的innerHTML为当前组件某个属性的属性值) ,可选</li>
+        </ol>
+        <p class="text-error">注意,在avalon2中是严禁在绑定属性中混入插值表达式</p>
+        <ms-pager></ms-pager>
+    </td></tr>
+</table>

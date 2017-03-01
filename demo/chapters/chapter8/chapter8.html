@@ -3,8 +3,7 @@
         <h5>验证规则绑定ms-rules</h5>
         <p>此指令只能用于添加ms-duplex指令的表单元素上</p>
         <table class="table table-bordered">
-            <thead><tr><th>规则</th><th>描述</th></tr></thead>
-            <tbody>
+            <tr><th>规则</th><th>描述</th></tr>
             <tr><td>required(true)</td><td>必须输入的字段</td></tr>
             <tr><td>norequired(true)</td><td>不是必填的字段</td></tr>
             <tr><td>email(true)</td><td>必须输入正确格式的电子邮件</td></tr>
@@ -19,7 +18,6 @@
             <tr><td>chs（true）</td><td>要求输入全部是中文</td></tr>
             <tr><td>max:5</td><td>输入值不能大于 5</td></tr>
             <tr><td>min:10</td><td>输入值不能小于 10</td></tr>
-            </tbody>
         </table>
         <p>要验征框架能动起来，必须在所有表单元素外包一个form元素，并加ms-validate指令，ms-rules指令要求为一个普通的JS对象。</p>
         <style>

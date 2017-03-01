@@ -2,7 +2,7 @@
     <tr><td>
         <h5>双工绑定ms-duplex</h5>
         <table class="table table-bordered">
-            <thead><td>控件</td><td>触发时机</td><td>数据</td></thead>
+            <tr><th>控件</th><th>触发时机</th><th>数据</th></tr>
             <tr><td>text,password,textarea及可编辑元表</td><td>oninput,onchange, debounce</td><td>简单数据</td></tr>
             <tr><td>radio,checkbox</td><td>onclick</td><td>简单数据或数组</td></tr>
             <tr><td>select</td><td>onchange</td><td>简单数据或数组</td></tr>
@@ -54,9 +54,7 @@
             <option value="-1">down</option>
         </select>
         <table class="table table-bordered">
-            <thead>
-                <td ms-for="el in @options">{{el}}</td>
-            </thead>
+            <tr><th ms-for="el in @options">{{el}}</th></tr>
             <tr ms-for="el in @data | orderBy(@selected, @trend)">
                 <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
             </tr>

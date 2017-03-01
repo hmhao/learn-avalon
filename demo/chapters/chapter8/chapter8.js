@@ -42,19 +42,19 @@ define(['avalon', 'text!./chapter8.html'], function(avalon, tpl) {
     });
 
     avalon.validators.checked = {
-        message: '必须勾上',
+        message: '必须扣上',
         get: function (value, field, next) {
             next(value);
             return value
         }
-    };
+    }
     avalon.validators.selecttwo = {
         message: '至少选择两个',
         get: function (value, field, next) {
-            next(!vm.toggle || value.length >= 2);
+            next(!vm.toggle || value.length >= 2)
             return value
         }
-    };
+    }
 
     var root = avalon.vmodels.root;
     root.$templateCache['chapter8'] = tpl;

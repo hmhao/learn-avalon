@@ -1,0 +1,85 @@
+<table class="table table-striped" ms-controller="chapter10">
+    <tr><td>
+        <h5>动画绑定ms-effect</h5>
+    </td></tr>
+    <tr><td>
+        <h5>avalon.effect注册特效</h5>
+        <p>avalon.effect(name, definition)</p>
+        <h5>ms-effect拥有这三种绑定形式</h5>
+        <pre ms-skip>
+&lt;p ms-effect="[@configObj,{is:'fade'}"&gt;
+属性值为字面量,其中一个对象必须包括is属性,这用于指定特效名
+&lt;p ms-effect="{is:fade, stagger:300}"&gt;
+属性值为对象字面量, 里面拥有is属性
+&lt;p ms-effect="@fadeConfig"&gt;
+属性值为vm的对象,里面拥有is属性
+        </pre>
+        <h5>is:指明动画, action:指明动画的动作(默认有三种方式, enter, leave, move)</h5>
+        <style>
+            .animate-enter, .animate-leave{
+                width:100px;
+                height:100px;
+                background: #29b6f6;
+                transition: width 2s;
+                -moz-transition: width 2s; /* Firefox 4 */
+                -webkit-transition: width 2s; /* Safari 和 Chrome */
+                -o-transition: width 2s; /* Opera */
+            }
+            .animate-enter-active, .animate-leave{
+                width:300px;
+            }
+            .animate-leave-active{
+                width:100px;
+            }
+        </style>
+        <div ms-effect="{is:'animate', action:@animateAction, onEnterDone: @enterCb, onLeaveDone: @leaveCb}">
+        </div>
+        <button ms-click='@animateAction = @animateAction !== "leave" ? "leave": "enter"' type="button">
+            {{@animateAction !== "leave" ? "收缩": "展开"}}
+        </button>
+    </td></tr>
+    <tr><td>
+        <style>
+            .ani{
+                width:100px;
+                height:100px;
+                background: #ff6e6e;
+            }
+            .wave-left, .wave-right {
+                -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+                -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+                -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+                transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+            }
+            .wave-left {
+                position:absolute;
+                left:45%;
+            }
+            .wave-left-active {
+                left:0;
+            }
+            .wave-right {
+                position:absolute;
+                left:0;
+            }
+            .wave-right-active {
+                left:45%;
+            }
+        </style>
+        <div style="position: relative; width:100%; height:100px;">
+            <div class='ani' ms-effect="{is:'wave', action:@waveAction, onEnterDone: @enterCb, onLeaveDone: @leaveCb}">
+                <button ms-click='@waveAction = @waveAction !== "leave" ? "leave": "enter"' type="button">
+                    {{@waveAction !== "enter" ? "向左": "向右"}}
+                </button>
+            </div>
+        </div>
+    </td></tr>
+    <tr><td>
+        <h5>综合动画效果</h5>
+        <div ms-for="el in @arr">
+            <div class="ani" ms-attr="{eee:el}" ms-widget="{is:'ms-button'}"
+                 ms-effect="{is:'zoom', action:@toggle}">{{@aaa}}::{{el}}</div>
+        </div>
+        <button ms-click="@toggle = !@toggle">点我</button>
+    </td></tr>
+</table>

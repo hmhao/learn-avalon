@@ -1,0 +1,147 @@
+<table class="table table-striped" ms-controller="chapter8">
+    <tr><td>
+        <h5>验证规则绑定ms-rules</h5>
+        <p>此指令只能用于添加ms-duplex指令的表单元素上</p>
+        <table class="table table-bordered">
+            <thead><tr><th>规则</th><th>描述</th></tr></thead>
+            <tbody>
+            <tr><td>required(true)</td><td>必须输入的字段</td></tr>
+            <tr><td>norequired(true)</td><td>不是必填的字段</td></tr>
+            <tr><td>email(true)</td><td>必须输入正确格式的电子邮件</td></tr>
+            <tr><td>url(true)</td><td>必须输入正确格式的网址</td></tr>
+            <tr><td>date(true或正则)</td><td>必须输入正确格式的日期。默认是要求YYYY-MM-dd这样的格式</td></tr>
+            <tr><td>number(true)</td><td>必须输入合法的数字（负数，小数）</td></tr>
+            <tr><td>digits(true)</td><td>必须输入整数</td></tr>
+            <tr><td>pattern(正则或true）</td><td>让输入数据匹配给定的正则，如果没有指定，那么会到元素上找pattern属性转换成正则再匹配</td></tr>
+            <tr><td>equalto(ID名）</td><td>输入值必须和 #id 元素的value 相同</td></tr>
+            <tr><td>maxlength：5</td><td>输入长度最多是 5 的字符串（汉字算一个字符）</td></tr>
+            <tr><td>minlength：10</td><td>输入长度最小是 10 的字符串（汉字算一个字符）</td></tr>
+            <tr><td>chs（true）</td><td>要求输入全部是中文</td></tr>
+            <tr><td>max:5</td><td>输入值不能大于 5</td></tr>
+            <tr><td>min:10</td><td>输入值不能小于 10</td></tr>
+            </tbody>
+        </table>
+        <p>要验征框架能动起来，必须在所有表单元素外包一个form元素，并加ms-validate指令，ms-rules指令要求为一个普通的JS对象。</p>
+        <style>
+            .simple-form .help-inline{display: none}
+            .simple-form .error .help-inline{display: block}
+        </style>
+        <form ms-validate="@validate" class="simple-form">
+            <div class="control-group">
+                <div class="controls">
+                    <input type="text" placeholder="username"
+                           ms-rules="{required:true,chs:true}" ms-duplex="@aaa">
+                    <span class="help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="password" placeholder="password" id="pw"
+                           ms-rules="{required:true}" ms-duplex="@bbb">
+                    <span class="help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="password" placeholder="再填一次"
+                           ms-rules="{required:true,equalto:'pw'}" ms-duplex="@ccc | change">
+                    <span class="help-inline"></span>
+                </div>
+            </div>
+            <div class="controls">
+                <button type="submit" class="btn">Sign in</button>
+            </div>
+        </form>
+    </td></tr>
+    <tr><td>
+        <form class="cmxform" ms-validate="@validate2" >
+            <fieldset>
+                <legend>验证完整的表单</legend>
+                <p>
+                    <label for="firstname">
+                        名字
+                        <input id="firstname" name="firstname" ms-duplex="@firstname"
+                                ms-rules="{required:true, pattern: /[\u4e00-\u9fa5a-z]{2-8}/i }"
+                                data-required-message="必须是中文或字母(3-8个字符)" >
+                    </label>
+                </p>
+                <p>
+                    <label for="lastname">
+                        姓氏
+                        <input id="lastname" name="lastname" ms-duplex="@lastname"
+                               ms-rules="{required:true}" data-required-message="请输入您的姓氏">
+                    </label>
+                </p>
+                <p>
+                    <label for="username">
+                        用户名
+                        <input id="username" name="username" ms-duplex="@username | change"
+                               ms-rules="{required:true, minlength:2}">
+                    </label>
+                </p>
+                <p>
+                    <label for="password">
+                        密码
+                        <input id="password" name="password" type="password"
+                               ms-duplex="@password" ms-rules="{required:true,minlength:5}"
+                               data-required-message="请输入密码"
+                               data-required-message="密码长度不能小于 5 个字母">
+                    </label>
+                </p>
+                <p>
+                    <label for="confirm_password">
+                        验证密码
+                        <input id="confirm_password" name="confirm_password" type="password"
+                               ms-duplex="@confirm_password | change"
+                               ms-rules="{required:true,equalto:'password'}"
+                               data-equalto-message="两次密码输入不一致">
+                    </label>
+                </p>
+                <p>
+                    <label for="email">
+                        Email
+                        <input id="email" name="email" type="email"
+                               ms-duplex="@email" ms-rules="{email:true}"
+                               data-email-message="请输入一个正确的邮箱">
+                    </label>
+                </p>
+                <p>
+                    <label for="agree">
+                        <input type="checkbox" class="checkbox" id="agree" name="agree"
+                               ms-duplex-checked="@agree" ms-rules="{checked:true}">
+                        请同意我们的声明
+                    </label>
+                </p>
+                <p>
+                    <label for="newsletter">
+                        <input type="checkbox" class="checkbox" id="newsletter"
+                               name="newsletter" ms-duplex-checked="@toggle">
+                        我乐意接收新信息
+                    </label>
+                </p>
+                <fieldset id="newsletter_topics" ms-visible="@toggle" >
+                    <legend>主题 (至少选择两个) </legend>
+                    <label for="topic_marketflash">
+                        <input type="checkbox" id="topic_marketflash" value="marketflash"
+                               name="topic[]" ms-duplex="@topic" ms-rules="{selecttwo:true}">
+                        Marketflash
+                    </label>
+                    <label for="topic_fuzz">
+                        <input type="checkbox" id="topic_fuzz" value="fuzz"
+                               name="topic[]" ms-duplex="@topic" ms-rules="{selecttwo:true}">
+                        Latest fuzz
+                    </label>
+                    <label for="topic_digester">
+                        <input type="checkbox" id="topic_digester" value="digester"
+                               name="topic[]" ms-duplex="@topic" ms-rules="{selecttwo:true}">
+                        Mailing list digester
+                    </label>
+                    <label for="topic" class="error" style="display:none">至少选择两个</label>
+                </fieldset>
+                <p>
+                    <input class="submit" type="submit" value="提交">
+                </p>
+            </fieldset>
+        </form>
+    </td></tr>
+</table>

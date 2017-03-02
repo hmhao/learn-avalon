@@ -20,7 +20,12 @@
         <div class="row">
             <div class="span2">
                 <ul class="nav nav-list">
-                    <li class="nav-header">章节：</li>
+                    <li class="nav-header">
+                        章节：
+                        <label class="checkbox inline" style="vertical-align:inherit">
+                            <input type="checkbox" ms-duplex-checked="@showCode">Code
+                        </label>
+                    </li>
                     <li :for="(nav, title) in @navs" :class="@selected==nav && 'active'">
                         <a href="javascript:void(0)" :click="@router(nav)" :text="title"></a>
                     </li>
@@ -28,14 +33,14 @@
             </div>
             <div class="span10">
                 <div class="row">
-                    <div class="span5">
+                    <div class="span5" style="display: none" :visible="@showCode">
                         <pre class="prettyprint linenums">
                             <ol class="linenums">
                                 <li :for="($index, line) in @code.split('\n')" :class="['L'+$index]">{{line}}</li>
                             </ol>
                         </pre>
                     </div>
-                    <div class="span5" :html="@page"></div>
+                    <div :class="[@showCode ? 'span5' : 'span10']" :html="@page"></div>
                 </div>
             </div>
         </div>

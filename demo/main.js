@@ -21,9 +21,11 @@ require(['avalon', "domReady!"], function() {
             chapter8:'rules | validate',
             chapter9:'widget',
             chapter10:'effect',
+            chapter11:'过滤器',
         },
         selected:'',
         code: '',
+        showCode: false,
         page:'',
         router: function (chapter) {
             this.selected = chapter;
@@ -36,5 +38,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter10');
+    model.router('chapter11');
 });

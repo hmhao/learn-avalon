@@ -1,0 +1,350 @@
+<table class="table table-striped" ms-controller="chapter11">
+    <tr><td>
+        <h5>格式化过滤器</h5>
+        <h6 ms-skip>用于处理数字或字符串，多用于{{}}或ms-attr 或ms-class</h6>
+        <table class="table table-bordered">
+            <tr><th>过滤器</th><th width="50%"></th><th>说明</th></tr>
+            <tr>
+                <td>uppercase</td>
+                <td>aaa -> {{@aaa | uppercase}}</td>
+                <td>将字符串全部大写</td>
+            </tr>
+            <tr>
+                <td>lowercase</td>
+                <td>AAA -> {{@AAA | lowercase}}</td>
+                <td>将字符串全部小写</td>
+            </tr>
+            <tr>
+                <td>truncate</td>
+                <td>121323234324324 -> {{@bbb | truncate(10,'...')}}</td>
+                <td>对长字符串进行截短，截断长度（默认为30）和结尾标识</td>
+            </tr>
+            <tr>
+                <td>camelize</td>
+                <td>bbb-bbb -> {{@BBB | camelize}}</td>
+                <td>驼峰化处理</td>
+            </tr>
+            <tr>
+                <td>escape</td>
+                <td>&lt;b&gt;123&lt;/b&gt; -> {{@ccc | escape}}</td>
+                <td>对类似于HTML格式的字符串进行转义</td>
+            </tr>
+            <tr>
+                <td>sanitize</td>
+                <td>
+                    <pre>
+&lt;script&gt;var a = $("div").onclick(function(){})&lt;/script&gt;
+&lt;a href="javascript:alert(123)"&gt;123&lt;/a&gt;
+                    </pre>
+                    {{@CCC | sanitize}}
+                </td>
+                <td>对用户输入的字符串进行反XSS处理，去掉onclick, javascript:alert，&lt;script&gt;等危险属性与标签</td>
+            </tr>
+            <tr>
+                <td>number</td>
+                <td>
+                    <p>输入数字:<input ms-duplex="@ddd"></p>
+                    <p>不处理：{{@ddd}}</p>
+                    <p>不传参：{{@ddd|number}}</p>
+                    <p>不保留小数：{{@ddd|number(0)}}</p>
+                    <p>负数:{{-@ddd|number(4)}}</p>
+                </td>
+                <td>对需要处理的数字的整数部分插入千分号（每三个数字插入一个逗号），有一个参数fractionSize，用于保留小数点的后几位（默认为3）</td>
+            </tr>
+            <tr>
+                <td>currency</td>
+                <td>
+                    <p>{{@ddd|currency}}</p>
+                    <p>{{@ddd|currency('$', 3)}}</p>
+                </td>
+                <td>格式化货币，类似于number过滤器，但前面加了一个货币符号symbol, 默认是\uFFE5。fractionSize，小数点后保留多少数，默认是2</td>
+            </tr>
+            <tr>
+                <td>date</td>
+                <td>
+                    <table class="table table-bordered">
+                        <tr><td>new Date</td><td>{{ @d1 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'2011/07/08'</td><td>{{ @d2 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'2011-07-08'</td><td>{{ @d3 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'01-01-2000'</td><td>{{ @d4 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'03 04,2000'</td><td>{{ @d5 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'3 4,2000'</td><td>{{ @d6 | date("yyyy MM dd")}}</td></tr>
+                        <tr><td>1373021259229</td><td>{{ @d7 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'1373021259229'</td><td>{{ @d8 | date("yyyy MM dd:HH:mm:ss")}}</td></tr>
+                        <tr><td>'2014-12-07T22:50:58+08:00'</td><td>{{ @d9 | date("yyyy MM dd:HH:mm:ss")}}<p>//这tdISO8601的日期格式</p></td></tr>
+                        <tr><td>'\/Date(1373021259229)\/'</td><td>{{ @d10| date("yyyy MM dd:HH:mm:ss")}}<p>//这是ASP.NtdT输出的JSON数据的日期格式</p></td></tr>
+                    </table>
+                </td>
+                <td>
+                    对日期进行格式化，date(formats), 目标可能是符合一定格式的字符串，数值，或Date对象。
+                    <table class="table table-bordered">
+                        <tr><th>标记</th><th>说明</th></tr>
+                        <tr><td>yyyy</td><td>将当前的年份以4位数输出，如果那一年为300，则补足为0300</td></tr>
+                        <tr><td>yy</td><td>将当前的年份截取最后两位数输出，如2014变成14， 1999变成99， 2001变成01</td></tr>
+                        <tr><td>y</td><td>将当前的年份原样输出，如2014变成2014， 399变成399， 1变成1</td></tr>
+                        <tr><td>MMMM</td><td>在中文中，MMMM与MMM是没有区别，都是"1月"，"2月"……英语则为该月份的单词全拼</td></tr>
+                        <tr><td>MMM</td><td>在中文中，MMMM与MMM是没有区别，都是"1月"，"2月"……英语则为该月份的单词缩写(前三个字母)</td></tr>
+                        <tr><td>MM</td><td>将月份以01-12的形式输出(即不到两位数，前面补0)</td></tr>
+                        <tr><td>M</td><td>将月份以1-12的形式输出</td></tr>
+                        <tr><td>dd</td><td>以日期以01-31的形式输出(即不到两位数，前面补0)</td></tr>
+                        <tr><td>d</td><td>以日期以1-31的形式输出</td></tr>
+                        <tr><td>EEEE</td><td>将当前天的星期几以“星期一”，“星期二”，“星期日”的形式输出，英语则Sunday-Saturday</td></tr>
+                        <tr><td>EEE</td><td>将当前天的星期几以“周一”，“周二”，“周日”的形式输出，英语则Sun-Sat</td></tr>
+                        <tr><td>HH</td><td>将当前小时数以00-23的形式输出</td></tr>
+                        <tr><td>H</td><td>将当前小时数以0-23的形式输出</td></tr>
+                        <tr><td>hh</td><td>将当前小时数以01-12的形式输出</td></tr>
+                        <tr><td>h</td><td>将当前小时数以0-12的形式输出</td></tr>
+                        <tr><td>mm</td><td>将当前分钟数以00-59的形式输出</td></tr>
+                        <tr><td>m</td><td>将当前分钟数以0-59的形式输出</td></tr>
+                        <tr><td>ss</td><td>将当前秒数以00-59的形式输出</td></tr>
+                        <tr><td>s</td><td>将当前秒数以0-59的形式输出</td></tr>
+                        <tr><td>a</td><td>将当前时间是以“上午”，“下午”的形式输出</td></tr>
+                        <tr><td>Z</td><td>将当前时间的时区以-1200-+1200的形式输出</td></tr>
+                        <tr><td>fullDate</td><td>相当于y年M月d日EEEE 2014年12月31日星期三</td></tr>
+                        <tr><td>longDate</td><td>相当于y年M月d日EEEE 2014年12月31日</td></tr>
+                        <tr><td>medium</td><td>相当于yyyy-M-d H:mm:ss 2014-12-31 19:02:44</td></tr>
+                        <tr><td>mediumDate</td><td>相当于yyyy-M-d 2014-12-31</td></tr>
+                        <tr><td>mediumTime</td><td>相当于H:mm:ss 19:02:44</td></tr>
+                        <tr><td>short</td><td>相当于yy-M-d ah:mm 14-12-31 下午7:02</td></tr>
+                        <tr><td>shortDate</td><td>相当于yy-M-d 14-12-31</td></tr>
+                        <tr><td>shortTime</td><td>相当于ah:mm 下午7:02</td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td></tr>
+    <tr><td>
+        <h5>循环过滤器</h5>
+        <h6>用于ms-for指令中</h6>
+        <table class="table table-bordered">
+            <tr><th>过滤器</th><th width="40%"></th><th>说明</th></tr>
+            <tr>
+                <td>limitBy</td>
+                <td>
+                    <select class="span1 pull-right" ms-duplex-number='@num'>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                    <ul class="pull-left">数组<li ms-for='el in @array1 | limitBy(@num)'>{{el}}</li></ul>
+                    <ul class="pull-left">对象<li ms-for='el in @object1 | limitBy(@num)'>{{el}}</li></ul>
+                </td>
+                <td>
+                    <p>对数组与对象都有效, 限制输出到页面的个数, 有两个参数</p>
+                    <p>limit: 最大个数,必须是数字或字符, 当个数超出数组长或键值对总数时, 等于后面</p>
+                    <p>begin: 开始循环的个数, 可选,默认0</p>
+                </td>
+            </tr>
+            <tr>
+                <td>orderBy</td>
+                <td>
+                    <select class="span1" ms-duplex='@order'>
+                        <option>a</option>
+                        <option>b</option>
+                    </select>
+                    <select class="span1" ms-duplex-number='@dir'>
+                        <option>1</option>
+                        <option>-1</option>
+                    </select>
+                    <table class="table table-bordered">
+                        <tr><th>a</th><th>b</th></tr>
+                        <tr ms-for="el in @array2 | orderBy(@order, @dir)">
+                            <td ms-for='elem in el'>{{elem}}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <p>对数组与对象都有效, 用于排序, 有两个参数</p>
+                    <p>key: 要排序的属性名</p>
+                    <p>dir: -1或1, 顺序或倒序,可选,默认1</p>
+                </td>
+            </tr>
+            <tr>
+                <td>filterBy</td>
+                <td>
+                    <select class="span1 pull-right" ms-duplex='@search'>
+                        <option>a</option>
+                        <option>b</option>
+                        <option>c</option>
+                    </select>
+                    <div class="pull-right">
+                        <p><button class="btn" ms-click="@search = @searchFn1 | prevent">过滤索引大于2</button></p>
+                        <p><button class="btn" ms-click="@search = @searchFn2 | prevent">过滤字串长度等于4</button></p>
+                        <p><button class="btn" ms-click="@search = @searchFn3 | prevent">过滤索引等于1|键值b</button></p>
+                    </div>
+                    数组
+                    <ul><li ms-for="el in @array3 | filterBy(@search, '123')">{{el}}</li></ul>
+                    对象
+                    <ul><li ms-for="el in @object3 | filterBy(@search)">{{el}}</li></ul>
+                    过滤数组中name属性值带lin中的元素
+                    <div ms-for="(index,el) in @arr as items | filterBy(@fn)" >
+                        {{el.name}} -- {{items.length}}
+                    </div>
+                </td>
+                <td>
+                    <p>对数组与对象都有效, 用于获取它们的某一子集, 有至少一个参数</p>
+                    <p><img src="http://avalonjs.coding.me/styles/filterBy.png"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>selectBy</td>
+                <td>
+                    <p>{a: 'aaa', b: 'bbb', c: 'ccc', d: 'ddd', e: 'eee'} | selectBy(['c','a','b'])</p>
+                    <ul><li ms-for="el in @obj | selectBy(['c','a','b'])">{{el}}</li></ul>
+                    <p>[{a: 1, b: 2, c: 3}, {c: 11, b: 22, a: 33}, {b: 23, a: 44}] | selectBy(['a','b','c'],@defaults)</p>
+                    <table class="table table-bordered">
+                        <tr ms-for="tr in @grid">
+                            <td ms-for="td in tr | selectBy(['a','b','c'],@defaults)">{{td}}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <p>只对对象有效, 用于抽取目标对象的几个值,构成新数组返回</p>
+                    <p>array，要抽取的属性名</p>
+                    <p>defaults，如果目标对象不存在这个属性,那么从这个默认对象中得到默认值,否则为空字符串, 可选
+                        这个多用于表格, 每一列的对象可能存在属性顺序不一致或缺少的情况</p>
+                </td>
+            </tr>
+        </table>
+    </td></tr>
+    <tr><td>
+        <h5>事件过滤器</h5>
+        <h6>事件过滤器只要是对一些常用操作进行简化处理，如对按键事件(keyup,keydown,keypress)到底按下了哪些功能键
+            或方向键进行友好的处理.许多人都记不清回车退格的keyCode是多少. 对阻止默认行为与防止冒泡进行封装</h6>
+        <table class="table table-bordered">
+            <tr><th>过滤器</th><th width="40%"></th><th>说明</th></tr>
+            <tr>
+                <td>esc</td>
+                <td>ms-keyup="@fn | esc"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | esc"></td>
+                <td>当用户按下esc键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>tab</td>
+                <td>ms-keyup="@fn | tab"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | tab"></td>
+                <td>当用户按下tab键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>enter</td>
+                <td>ms-keyup="@fn | enter"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | enter"></td>
+                <td>当用户按下enter键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>space</td>
+                <td>ms-keyup="@fn | space"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | space"></td>
+                <td>当用户按下space键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>del</td>
+                <td>ms-keyup="@fn | del"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | del"></td>
+                <td>当用户按下del键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>up</td>
+                <td>ms-keyup="@fn | up"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | up"></td>
+                <td>当用户按下up键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>down</td>
+                <td>ms-keyup="@fn | down"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | down"></td>
+                <td>当用户按下down键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>left</td>
+                <td>ms-keyup="@fn | left"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | left"></td>
+                <td>当用户按下left键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>right</td>
+                <td>ms-keyup="@fn | right"
+                    <input type="text" class="span1" ms-keyup="@eventFn1" ms-keyup-1="@eventFn2 | right"></td>
+                <td>当用户按下right键时,执行你的回调</td>
+            </tr>
+            <tr>
+                <td>prevent</td>
+                <td>ms-click="@fn | prevent"
+                    <a href="http://www.baidu.com" class="btn" ms-click="@eventFn2 | prevent">button</a></td>
+                <td>阻止默为行为,多用于form的submit事件防止页面跳转,相当于调用了event.preventDefault</td>
+            </tr>
+            <tr>
+                <td>stop</td>
+                <td>ms-click="@fn | stop"
+                    <span ms-click="@eventFn2">
+                        <button class="btn" ms-click="@eventFn2 | stop">button</button>
+                    </span>
+                </td>
+                <td>阻止事件冒泡,相当于调用了event.stopPropagation</td>
+            </tr>
+        </table>
+    </td></tr>
+    <tr><td>
+        <h5>同步频率过滤器</h5>
+        <h6>只用于ms-duplex</h6>
+        <table class="table table-bordered">
+            <tr><th>过滤器</th><th width="40%"></th><th>说明</th></tr>
+            <tr>
+                <td>change</td>
+                <td>ms-duplex="@duplexChange | change"
+                    <input ms-duplex='@duplexChange | change'>{{@duplexChange}}</td>
+                <td>在文本域或文本区使用ms-duplex时,默认是每输入一个字符就同步一次.
+                    <p class="text-error">当我们想在失去焦点时才进行同步, 那么可以使用此过滤器</p></td>
+            </tr>
+            <tr>
+                <td>debounce</td>
+                <td>ms-duplex="@duplexDebounce | debounce"
+                    <input ms-duplex='@duplexDebounce | debounce(1000)'>{{@duplexDebounce}}</td>
+                <td>当我们实现搜索框的自动完成时, 每输入一个字符可能就会向后台请求一次(请求关键字列表),
+                    这样太频繁,后端撑不住,但使用change过滤器,则又太慢了.改为每隔几十毫秒请求一次就最好.
+                    基于此常用需要开发出此过滤器. 拥有一个参数.
+                    <p>debounceTime: 数字, 不写默认是300,不能少于4,否则做无效处理</p>
+                </td>
+            </tr>
+        </table>
+    </td></tr>
+    <tr><td>
+        <h5>自定义过滤器</h5>
+        <h6>过滤器有两种, 不带参数的及带参数的</h6>
+        <table class="table table-bordered">
+            <tr><th>过滤器</th><th width="60%"></th><th>说明</th></tr>
+            <tr>
+                <td>不带参数</td>
+                <td>
+                    <pre ms-skip>
+{{@aaa | uppercase}}
+
+avalon.filters.uppercase = function (str) {
+    return String(str).toUpperCase()
+}
+                    </pre>
+                </td>
+                <td>过滤器总是把它前方的表达式生成的东西作为过滤器的第一个参数,然后返回一个值</td>
+            </tr>
+            <tr>
+                <td>带参数</td>
+                <td>
+                    <pre ms-skip>
+{{@aaa | truncate(10,'...')}}
+
+avalon.filters.truncate = function (str, length, truncation) {
+    //length，新字符串长度，truncation，新字符串的结尾的字段,返回新字符串
+    length = length || 30
+    truncation = typeof truncation === "string" ? truncation : "..."
+    return str.length > length ?
+            str.slice(0, length - truncation.length) + truncation :
+            String(str)
+}
+                    </pre>
+                </td>
+                <td>带参数的必须写的括号,把第二个,第三个,放到里面</td>
+            </tr>
+        </table>
+    </td></tr>
+</table>

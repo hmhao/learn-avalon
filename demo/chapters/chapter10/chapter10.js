@@ -7,7 +7,7 @@ define(['avalon', 'text!./chapter10.html'], function(avalon, tpl) {
         leaveActiveClass: 'wave-right-active'
     });
     avalon.component('ms-button', {
-        template: '<button type="button"><span><slot name="buttonText"></slot></span></button>',
+        template: '<button class="btn" type="button"><span><slot name="buttonText"></slot></span></button>',
         defaults: {
             buttonText: 'button'
         },
@@ -25,6 +25,10 @@ define(['avalon', 'text!./chapter10.html'], function(avalon, tpl) {
             }, 1000, done);
         }
     });
+    avalon.effect("my-repeat-animation", {
+        enterClass: 'ng-enter',
+        leaveClass: 'ng-leave'
+    });
     var vm = avalon.define({
         $id: 'chapter10',
         animateAction: 'enter',
@@ -37,8 +41,30 @@ define(['avalon', 'text!./chapter10.html'], function(avalon, tpl) {
         },
         //
         arr: [1,2,3],
-        aaa: 222,
-        toggle: true
+        aaa: 'btn',
+        toggle: true,
+        //
+        array: [1, 2, 3, 4],
+        getBg: function() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        },
+        add: function() {
+            vm.array.push(vm.array.length + 1);
+            vm.array.push(vm.array.length + 1);
+            vm.array.push(vm.array.length + 1);
+        },
+        value: ''
+    });
+
+    vm.$watch('value', function(a) {
+        if (a) {
+            vm.array.removeAll(function(el) {
+                return el !== a
+            });
+        } else {
+            if(vm.array.length < 12)
+                vm.add()
+        }
     });
 
     var root = avalon.vmodels.root;

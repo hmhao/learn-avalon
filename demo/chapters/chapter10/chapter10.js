@@ -17,12 +17,12 @@ define(['avalon', 'text!./chapter10.html'], function(avalon, tpl) {
         enter: function (el, done) {
             avalon(el).css({width: 50, height: 50}).animate({
                 width: 100, height: 100
-            }, 2000, done);
+            }, 1000, done);
         },
         leave: function (el, done) {
             avalon(el).animate({
                 width: 50, height: 50
-            }, 2000, done);
+            }, 1000, done);
         }
     });
     var vm = avalon.define({
@@ -71,8 +71,9 @@ avalon.fn.mix({
         var $animate = this.$animate;
         if(!$animate){
             this.$animate = $animate = {};
+        }else{
+            clearInterval($animate.timer);
         }
-        clearInterval($animate.timer);
         $animate.elem = this.element;
         $animate.prop = prop;
         $animate.duration = duration || 1000;
@@ -104,13 +105,13 @@ avalon.fn.mix({
                 return fn && fn();
             }
             $animate.curframe++;
-            var val;
+            var ds;
             for(var prop in state) {
-                val = $animate.tween($animate.curframe,
+                ds = $animate.tween($animate.curframe,
                     state[prop].from,
                     state[prop].diff,
-                    $animate.fps).toFixed(2);
-                this.setStyle(prop, val);
+                    $animate.frames).toFixed(2);
+                this.setStyle(prop, ds);
             }
         }.bind(this), 1000 / $animate.fps);
     }

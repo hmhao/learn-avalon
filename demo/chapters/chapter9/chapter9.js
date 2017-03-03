@@ -9,7 +9,7 @@ define(['avalon', 'text!./chapter9.html'], function(avalon, tpl) {
             onPlus: function () {
                 this.num++;
             }
-        },
+        }
         //soleSlot 表示组件只有一个插槽,会将组件容器的所有孩子都移到这里来 ,可选
     });
     avalon.component('ms-slot',{
@@ -26,8 +26,7 @@ define(['avalon', 'text!./chapter9.html'], function(avalon, tpl) {
         soleSlot: 'buttonText'
     });
     var vm = avalon.define({
-        $id: 'chapter9',
-
+        $id: 'chapter9'
     });
 
     var root = avalon.vmodels.root;

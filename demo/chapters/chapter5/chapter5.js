@@ -31,8 +31,8 @@ define(['avalon', 'text!./chapter5.html'], function(avalon, tpl) {
 
     var interval = new function (vm) {
         var sexMap = {
-                true: '男',
-                false: '女'
+                'true': '男',
+                'false': '女'
             },
             genData = function (n){
                 var ret = [];

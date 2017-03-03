@@ -1,13 +1,13 @@
 define(['avalon', 'text!./chapter11.html'], function(avalon, tpl) {
     var vm = avalon.define({
         $id: 'chapter11',
-        aaa:'aaa',
-        AAA:'AAA',
-        bbb:'121323234324324',
-        BBB:'bbb-bbb',
-        ccc:'<b>123</b>',
-        CCC:'<script>var a = $("div").onclick(function(){})</script><a href="javascript:alert(123)">123</a>',
-        ddd:1234.56789,
+        f1:'aaa',
+        f2:'AAA',
+        f3:'121323234324324',
+        f4:'bbb-bbb',
+        f5:'<b>123</b>',
+        f6:'<script>var a = $("div").onclick(function(){})</script><a href="javascript:alert(123)">123</a>',
+        f7:1234.56789,
         d1: new Date,
         d2: '2011/07/08',
         d3: '2011-07-08',
@@ -56,9 +56,9 @@ define(['avalon', 'text!./chapter11.html'], function(avalon, tpl) {
         },
         eventFn2: function (evt) {
             if(evt.type === 'keyup'){
-                avalon(evt.currentTarget).val(evt.code);
+                avalon(evt.currentTarget).val(evt.key);
             }else if(evt.type === 'click'){
-                evt.currentTarget.innerHTML = evt.code;
+                evt.currentTarget.innerHTML = evt.key;
             }
         },
         duplexChange: 123,

@@ -18,7 +18,7 @@
         <h6>控件智能变化, 使用debounce过滤器</h6>
         <p><input ms-duplex="@passwordInput | debounce(1000)" type="password"/>{{@passwordInput}}</p>
         <h6>可编辑元素的用法与过滤器与上面三种控件一样</h6>
-        <p><div contenteditable="true" ms-duplex="@textInput | debounce(300)"></div>{{@textInput}}</p>
+        <div contenteditable="true" ms-duplex="@textInput | debounce(300)"></div>{{@textInput}}
     </td></tr>
     <tr><td>
         <h5>radio：简单数据,字符串,数字或布尔. checkbox：简单数据数组</h5>

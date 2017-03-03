@@ -6,27 +6,27 @@
             <tr><th>过滤器</th><th width="50%"></th><th>说明</th></tr>
             <tr>
                 <td>uppercase</td>
-                <td>aaa -> {{@aaa | uppercase}}</td>
+                <td>aaa -> {{@f1 | uppercase}}</td>
                 <td>将字符串全部大写</td>
             </tr>
             <tr>
                 <td>lowercase</td>
-                <td>AAA -> {{@AAA | lowercase}}</td>
+                <td>AAA -> {{@f2 | lowercase}}</td>
                 <td>将字符串全部小写</td>
             </tr>
             <tr>
                 <td>truncate</td>
-                <td>121323234324324 -> {{@bbb | truncate(10,'...')}}</td>
+                <td>121323234324324 -> {{@f3 | truncate(10,'...')}}</td>
                 <td>对长字符串进行截短，截断长度（默认为30）和结尾标识</td>
             </tr>
             <tr>
                 <td>camelize</td>
-                <td>bbb-bbb -> {{@BBB | camelize}}</td>
+                <td>bbb-bbb -> {{@f4 | camelize}}</td>
                 <td>驼峰化处理</td>
             </tr>
             <tr>
                 <td>escape</td>
-                <td>&lt;b&gt;123&lt;/b&gt; -> {{@ccc | escape}}</td>
+                <td>&lt;b&gt;123&lt;/b&gt; -> {{@f5 | escape}}</td>
                 <td>对类似于HTML格式的字符串进行转义</td>
             </tr>
             <tr>
@@ -36,26 +36,26 @@
 &lt;script&gt;var a = $("div").onclick(function(){})&lt;/script&gt;
 &lt;a href="javascript:alert(123)"&gt;123&lt;/a&gt;
                     </pre>
-                    {{@CCC | sanitize}}
+                    {{@f6 | sanitize}}
                 </td>
                 <td>对用户输入的字符串进行反XSS处理，去掉onclick, javascript:alert，&lt;script&gt;等危险属性与标签</td>
             </tr>
             <tr>
                 <td>number</td>
                 <td>
-                    <p>输入数字:<input ms-duplex="@ddd"></p>
-                    <p>不处理：{{@ddd}}</p>
-                    <p>不传参：{{@ddd|number}}</p>
-                    <p>不保留小数：{{@ddd|number(0)}}</p>
-                    <p>负数:{{-@ddd|number(4)}}</p>
+                    <p>输入数字:<input ms-duplex="@f7"></p>
+                    <p>不处理：{{@f7}}</p>
+                    <p>不传参：{{@f7|number}}</p>
+                    <p>不保留小数：{{@f7|number(0)}}</p>
+                    <p>负数:{{-@f7|number(4)}}</p>
                 </td>
                 <td>对需要处理的数字的整数部分插入千分号（每三个数字插入一个逗号），有一个参数fractionSize，用于保留小数点的后几位（默认为3）</td>
             </tr>
             <tr>
                 <td>currency</td>
                 <td>
-                    <p>{{@ddd|currency}}</p>
-                    <p>{{@ddd|currency('$', 3)}}</p>
+                    <p>{{@f7|currency}}</p>
+                    <p>{{@f7|currency('$', 3)}}</p>
                 </td>
                 <td>格式化货币，类似于number过滤器，但前面加了一个货币符号symbol, 默认是\uFFE5。fractionSize，小数点后保留多少数，默认是2</td>
             </tr>
@@ -184,7 +184,7 @@
                 </td>
                 <td>
                     <p>对数组与对象都有效, 用于获取它们的某一子集, 有至少一个参数</p>
-                    <p><img src="http://avalonjs.coding.me/styles/filterBy.png"></p>
+                    <p><img style="width: 100%" src="http://avalonjs.coding.me/styles/filterBy.png"></p>
                 </td>
             </tr>
             <tr>

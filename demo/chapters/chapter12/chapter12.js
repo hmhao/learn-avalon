@@ -2,16 +2,24 @@ define(['avalon', 'text!./chapter12.html', './modal'], function(avalon, tpl) {
     var vm = avalon.define({
         $id: 'chapter12',
         modalShow: function(){
-            avalon.vmodels.mymodal.isShow = true;
+            this.modalConfig.isShow = true;
         },
         modalConfig: {
             id: 'mymodal',//组件实例id
             title:'这是测试',
+            isShow: false,
             onCancel: function(){
                 avalon.log('cancel');
             },
             onOk: function(){
                 avalon.log('ok');
+            },
+            onInit: function(){
+                //组件的是单向数据流，通过$watch同步父组件的状态。
+                this.$watch('isShow',function(val){
+                    //当前回调中的this指向子组件
+                    vm.modalConfig.isShow = val;
+                })
             }
         }
     });

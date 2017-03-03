@@ -10,7 +10,7 @@ define(['avalon', 'text!./modal.html', 'css!./modal.css'], function(avalon, tpl)
                 if (this.hasOwnProperty(cbName)) {
                     var ret = this[cbName]();
                     if (ret !== false || (ret && typeof ret.next === 'function')) {
-                        this.isShow = false;
+                        this.isShow = false;//组件的是单向数据流，子组件isShow更新了，但不会改变父组件的isShow状态
                     }
                 } else {
                     this.isShow = false;
@@ -22,8 +22,8 @@ define(['avalon', 'text!./modal.html', 'css!./modal.css'], function(avalon, tpl)
                 avalon(elem).css('display', 'none');
             },
             onReady: function () {
-                this.$watch('isShow', function (value) {
-                    if(value){
+                this.$watch('isShow', function (val) {
+                    if(val){
                         avalon(this.$element).css('display', '');
                         document.body.style.overflow = 'hidden';
                     }else{

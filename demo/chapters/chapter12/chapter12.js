@@ -7,6 +7,7 @@ define(['avalon', 'text!./chapter12.html', './modal'], function(avalon, tpl) {
         modalConfig: {
             id: 'mymodal',//组件实例id
             title:'这是测试',
+            content: '<p>弹窗的内容</p><p>弹窗的内容</p><p>弹窗的内容结束!</p>',
             isShow: false,
             onCancel: function(){
                 avalon.log('cancel');

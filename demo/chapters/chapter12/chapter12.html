@@ -1,11 +1,17 @@
 <table class="table table-striped" ms-controller="chapter12">
     <tr><td>
         <h5>组件：模态弹出窗</h5>
-        <xmp ms-widget="[{is:'ms-modal'}, @modalConfig]">
-            <p>弹窗的内容</p>
-            <p>弹窗的内容</p>
-            <p>弹窗的内容结束!</p>
-        </xmp>
+        <div class="input-prepend">
+            <span class="add-on">弹窗标题</span>
+            <input type="text" ms-duplex="@modalConfig.title" />
+        </div>
+        <br>
+        <div class="input-prepend">
+            <span class="add-on">弹窗内容</span>
+            <textarea rows="5" ms-duplex="@modalConfig.content"></textarea>
+        </div>
+        <br>
+        <xmp ms-widget="[{is:'ms-modal'}, @modalConfig]"></xmp>
         <button class="btn btn-info" ms-click="@modalShow">显示弹出</button>
     </td></tr>
 </table>

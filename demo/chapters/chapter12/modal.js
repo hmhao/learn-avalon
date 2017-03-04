@@ -4,6 +4,7 @@ define(['avalon', 'text!./modal.html', 'css!./modal.css'], function(avalon, tpl)
         template: tpl,
         defaults: {
             title: 'modal',
+            content: '',
             isShow: false,
             cbProxy: function (ok) {
                 var cbName = ok ? 'onOk' : 'onCancel';

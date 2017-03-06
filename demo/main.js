@@ -22,7 +22,8 @@ require(['avalon', "domReady!"], function() {
             chapter9:'widget',
             chapter10:'effect',
             chapter11:'过滤器',
-            chapter12:'组件:弹出层'
+            chapter12:'组件:弹出层',
+            chapter13:'组件:分页'
         },
         selected:'',
         code: '',
@@ -39,5 +40,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter12');
+    model.router('chapter13');
 });

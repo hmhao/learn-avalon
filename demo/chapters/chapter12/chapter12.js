@@ -20,7 +20,7 @@ define(['avalon', 'text!./chapter12.html', './modal'], function(avalon, tpl) {
                 this.$watch('isShow',function(val){
                     //当前回调中的this指向子组件
                     vm.modalConfig.isShow = val;
-                })
+                });
             }
         }
     });

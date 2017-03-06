@@ -1,0 +1,39 @@
+<div class="pagination"  :class="[
+        @size?'pagination-'+@size:'',
+        @align==0?'pagination-centered':@align==1?'pagination-right':''
+    ]">
+    <!--  bootstrap2.x分页 -->
+    <ul>
+        <li class="first"
+            ms-class="{disabled: @isDisabled('first', 1)}">
+            <a ms-attr="{href:@getHref('first'),title:@getTitle('first')}"
+               ms-click="cbProxy($event, 'first')" :html="@firstText">
+            </a>
+        </li>
+        <li class="prev"
+            ms-class="{disabled: @isDisabled('first', 1)}">
+            <a ms-attr="{href:@getHref('prev'),title:@getTitle('prev')}"
+                ms-click="cbProxy($event, 'prev')" :html="@prevText">
+            </a>
+        </li>
+        <li ms-for="page in @pages"
+            ms-class="{active: page === @currentPage}" >
+            <a ms-attr="{href:@getHref(page),title:@getTitle(page)}"
+               ms-click="cbProxy($event, page)">
+                {{page}}
+            </a>
+        </li>
+        <li class="next"
+            ms-class="{disabled: @isDisabled('last', @totalPages)}">
+            <a ms-attr="{href:@getHref('next'),title: @getTitle('next')}"
+               ms-click="cbProxy($event, 'next')" :html="@nextText">
+            </a>
+        </li>
+        <li class="last"
+            ms-class="{disabled: @isDisabled('last', @totalPages)}">
+            <a ms-attr="{href:@getHref('last'),title: @getTitle('last')}"
+               ms-click="cbProxy($event, 'last')" :html="@lastText">
+            </a>
+        </li>
+    </ul>
+</div>

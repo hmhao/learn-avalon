@@ -1,0 +1,20 @@
+<div>
+    <ul class="nav nav-tabs">
+        <li :for="($index,el) in @headers" :class="{active: $index === @curIndex}" :click="@curIndex = $index">
+            <a :attr="{href:el.href}">
+                <span :if="el.icon" :class="el.icon"></span>
+                {{el.title}}
+                <span :if="el.closeable" class="icon-remove close"
+                      :click="@closeTab($event,$index)" style="cursor:pointer"></span>
+            </a>
+        </li>
+    </ul>
+    <div class='tab-content' :css="{'border-width':@border ? '1px' : '0px'}">
+        <div class='tab-pane' :for='($index,el) in @contents'
+             :class='{active : $index === curIndex}' :html="el.html">
+        </div>
+        <div :if="!@contents || @contents.length === 0" class='tab-pane active'>
+            <h1 class='text-center'>{{@noContentTip}}</h1>
+        </div>
+    </div>
+</div>

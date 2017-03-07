@@ -4,7 +4,7 @@
             <a :attr="{href:el.href}">
                 <span :if="el.icon" :class="el.icon"></span>
                 {{el.title}}
-                <span :if="el.closeable" class="icon-remove close"
+                <span :visible="el.closeable" class="icon-remove close"
                       :click="@closeTab($event,$index)" style="cursor:pointer"></span>
             </a>
         </li>

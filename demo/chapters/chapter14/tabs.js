@@ -25,7 +25,7 @@ define(['avalon', 'text!./tabs.html'], function(avalon, tpl) {
     var defaultHeader = {
         title : '',
         href: 'javascript:void(0)',
-        iconCls : '',
+        icon : '',
         closeable : false
     };
     var defaultContent = {
@@ -35,23 +35,30 @@ define(['avalon', 'text!./tabs.html'], function(avalon, tpl) {
     avalon.component('ms-tabs', {
         template: tpl,
         defaults: {
-            $disable: {},
+            $removed: [],
             headers: [],
             contents: [],
             curIndex : 0,
             noContentTip : '暂无数据',
             add : function(obj, index){
+                if(!obj) return;
                 index = avalon.isNumeric(index) ? parseInt(index) : this.headers.length;
-                this.headers.splice(index, 0, avalon.mix({}, defaultHeader, {title: obj.header}));
-                this.contents.splice(index, 0, avalon.mix({}, defaultContent, {html: obj.content}));
+                this.headers.splice(index, 0, avalon.mix({}, defaultHeader,
+                    avalon.type(obj.header)=='string'?{title: obj.header}:obj.header));
+                this.contents.splice(index, 0, avalon.mix({}, defaultContent,
+                    avalon.type(obj.content)=='string'?{html: obj.content}:obj.content));
                 if(obj.selected){
                     this.curIndex = index;
                 }
             },
             closeTab : function(evt,i){
                 evt.stopPropagation();
-                this.headers.removeAt(i);
-                this.contents.removeAt(i);
+                var header = this.headers.removeAt(i);
+                var content = this.contents.removeAt(i);
+                this.$removed.push({
+                    header: header[0].$model,
+                    content: content[0].$model
+                });
                 var len = this.headers.length;
                 if(i === this.curIndex){
                     if(i === len){
@@ -78,10 +85,10 @@ define(['avalon', 'text!./tabs.html'], function(avalon, tpl) {
                 avalon.each(children,function(i,v){
                     var obj = {
                         title: v.getAttribute('title') || '',
-                        href: v.getAttribute('href') || 'javascript:void(0)'
+                        href: v.getAttribute('data-href') || 'javascript:void(0)',
+                        icon: v.getAttribute('data-icon') || '',
+                        closeable: v.getAttribute('data-closeable') !== null
                     };
-                    obj.icon = v.getAttribute('data-icon') || '';
-                    obj.closeable = v.getAttribute('data-closeable') !== null;
                     headers.push(obj);
                     contents.push({
                         html : v.innerHTML

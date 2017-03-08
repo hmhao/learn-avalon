@@ -80,7 +80,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
             return data;
         },
         //初始化前台数据
-        initDataFrontPage: function(vm, dom){
+        initDataFrontPage: function(vm, dom, page){
             var pageData = [];
             var children = this.getElementsByTagName(dom, 'tr');
             avalon.each(children, function(i,v){
@@ -93,52 +93,53 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                 });
                 data.length && pageData.push(data);
             });
-            this.initData(vm, pageData);
+            this.initData(vm, pageData, page);
         },
         //初始化数据
-        initData: function (vm, pageData) {
-            var fields = vm.columns.map(function (item) {
-                return item.field;
-            });
-            pageData = this.extendRowsData(pageData, fields);
-            vm.data[vm.$totalKey] = pageData.length;
-            vm.data[vm.$rowsKey] = pageData;
+        initData: function (vm, pageData, page) {
+            if(pageData){
+                var fields = vm.columns.map(function (item) {
+                    return item.field;
+                });
+                pageData = this.extendRowsData(pageData, fields);
+                vm.data[vm.$totalKey] = pageData.length;
+                vm.data[vm.$rowsKey] = pageData;
+            }
+            vm.currentPage = vm.changePage = page;
+            this.updatePagination(vm);
         },
         //更新分页信息
         updatePagination: function(vm){
             var total = vm.data[vm.$totalKey];
+            var pageSize = vm.pageSize;
             if(total === 0){
                 vm.totalPages = vm.currentPage = vm.changePage = 1;
                 vm.start = vm.end = 0;
             }else{
-                vm.totalPages = parseInt(total / vm.pageSize,10) + (total % vm.pageSize > 0 ? 1 : 0);
+                vm.totalPages = parseInt(total / pageSize,10) + (total % pageSize > 0 ? 1 : 0);
                 if(vm.currentPage === 0){
                     vm.changePage = vm.currentPage = 1;
                 }else if(vm.currentPage > vm.totalPages){
                     vm.changePage = vm.currentPage = vm.totalPages;
                 }
-                vm.start = 1 + vm.pageSize * (vm.currentPage - 1);
-                if(vm.start + vm.pageSize > total){
+                vm.start = 1 + pageSize * (vm.currentPage - 1);
+                if(vm.start + pageSize > total){
                     vm.end = total;
                 }else{
-                    vm.end = vm.start + vm.pageSize - 1;
+                    vm.end = vm.start + pageSize - 1;
                 }
             }
         },
         loadDataByPage: function(vm, page){
             if(!vm.url){
-                this.dealFrontPageData(vm, page);
+                this.initData(vm, null, page);
             }else{
                 this.ajaxLoad(vm, page);
             }
         },
-        dealFrontPageData: function(vm, page){
-            vm.currentPage = vm.changePage = page;
-            this.updatePagination(vm);
-        },
         ajaxLoad: function(vm, page, opt){
             avalon.mix(vm.$queryParams, opt);
-            avalon.ajax(avalon.mix(vm.$queryParams, {
+            var opts = avalon.mix(vm.$queryParams, {
                 url: vm.url,
                 success: function(data){
                     if(!data){//错误
@@ -146,15 +147,17 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                         return;
                     }
                     if(avalon.type(data) === 'array'){
-                        vm.data[vm.$totalKey] = data.length;
-                        this.dealFrontPageData(vm, page);//前台分页
-                    }else{
+                        this.initData(vm, data, page);
+                    }else if(avalon.type(data) === 'object' && data[vm.$rowsKey]){
+                        this.initData(vm, data[vm.$rowsKey], page);
                     }
+                    vm.onLoadSuccess(data);
                 }.bind(this),
                 error: function () {
                     vm.onLoadError();
                 }.bind(this)
-            }));
+            });
+            avalon.ajax(opts);
         }
     };
     avalon.component('ms-grid', {
@@ -236,7 +239,6 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
             end : 0,
             pageSize : 5,
             pageSizeArr : [5,10,15,20,25,30],
-            //pageSizeArr : [20,40,60,80,100],
             isDisabled: function (name, page) {
                 return this.$disable[name] = (this.currentPage === page);
             },
@@ -253,7 +255,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                     case 'last':
                         return max;
                     default:
-                        return p;
+                        return Math.max(1, Math.min(p, max));
                 }
             },
             $pageProxy: function (evt, p) {
@@ -282,9 +284,9 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                 }
                 if(!this.url){
                     if(!this.$frontPageData || !this.$frontPageData.length){
-                        grid.initDataFrontPage(this, evt.target);//尝试从dom获取
+                        grid.initDataFrontPage(this, evt.target, 1);//尝试从dom获取
                     }else{
-                        grid.initData(this, this.$frontPageData);
+                        grid.initData(this, this.$frontPageData, 1);
                     }
                 }
             },

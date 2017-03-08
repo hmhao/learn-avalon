@@ -18,11 +18,13 @@ define(['avalon', 'text!./chapter15.html', './grid'], function(avalon, tpl) {
             is: 'ms-grid',
             id: 'mygrid',
             title: 'test',
-            /*columns: [
+            url: './chapters/chapter15/array.json',
+            //url: './chapters/chapter15/object.json',
+            columns: [
                 {field: 'a1',title: 'a1', sort: true},
                 {field: 'a2',title: 'a2'},
                 {field: 'a3',title: 'a3'}
-            ],*/
+            ],
             /*$frontPageData: [
                 {
                     a1: 'rgwrtwrwerewrewrwerewrwerewr',
@@ -71,7 +73,7 @@ define(['avalon', 'text!./chapter15.html', './grid'], function(avalon, tpl) {
                     a1: 33
                 }
             ],*/
-            //$frontPageData: random2D()
+            //$frontPageData: random2D(),
         },
         getSelected: function () {
             avalon.log(avalon.vmodels.mygrid.getSelected());

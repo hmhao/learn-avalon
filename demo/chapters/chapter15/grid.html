@@ -6,11 +6,11 @@
         <table class="table" :class='@$style'>
             <thead>
             <tr>
-                <th :for="el in @columns" :css="{width:el.width}" :click='@sort(el)'>
+                <th :for="col in @columns" :css="{width:col.width}" :click='@sort(col)'>
                     <div>
-                        {{el.title}}
-                        <span class="pull-right" :visible="el.sortOrder">
-                            <i :class="['icon-caret-' + el.sortOrder]"></i>
+                        {{col.title}}
+                        <span class="pull-right" :visible="col.sortOrder">
+                            <i :class="['icon-caret-' + col.sortOrder]"></i>
                         </span>
                     </div>
                 </th>
@@ -28,6 +28,38 @@
             class="muted text-center">暂无数据</h2>
     </div>
     <div class="row">
-
+        <div :if="@pagination" class="clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button"
+                        :attr="{disabled: @isDisabled('first', 1)}"
+                        :click="@$pageProxy($event,'first')">
+                    <i class="icon-backward"></i>
+                </button>
+                <button class="btn btn-default" type="button"
+                        :attr="{disabled: @isDisabled('first', 1)}"
+                        :click="@$pageProxy($event,'prev')">
+                    <i class="icon-chevron-left"></i>
+                </button>
+                <input class="form-control span1 text-center" placeholder="页数"
+                       :duplex-number="@changePage" :keyup="@$pageProxy($event, @changePage) | enter">
+                <span>/{{@totalPages}}页</span>
+                <button class="btn btn-default" type="button"
+                        :attr="{disabled: @isDisabled('last', @totalPages)}"
+                        :click="@$pageProxy($event,'next')">
+                    <i class="icon-chevron-right"></i>
+                </button>
+                <button class="btn btn-default mpagination-last" type="button"
+                        :attr="{disabled: @isDisabled('last', @totalPages)}"
+                        :click="@$pageProxy($event,'last')">
+                    <i class="icon-forward"></i>
+                </button>
+            </div>
+            <div class="pull-right">
+                <span>当前第{{@currentPage}}页,{{@start}}~{{@end}}条,共{{@data[@$totalKey]}}条</span>
+                <select class="form-control span1" :duplex="@pageSize">
+                    <option :for="el in @pageSizeArr" :attr="{value: el}">{{el}}</option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>

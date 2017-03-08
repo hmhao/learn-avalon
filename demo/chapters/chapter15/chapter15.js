@@ -5,6 +5,9 @@ define(['avalon', 'text!./chapter15.html', './grid'], function(avalon, tpl) {
             is: 'ms-grid',
             id: 'mygrid',
             title : 'test'
+        },
+        getSelected: function () {
+            avalon.log(avalon.vmodels.mygrid.getSelected());
         }
     });
 

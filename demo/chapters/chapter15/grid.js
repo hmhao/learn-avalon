@@ -1,52 +1,5 @@
-define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
+define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
     var grid = {
-        testData: [
-            {
-                a1 : 'rgwrtwrwerewrewrwerewrwerewr'
-            },{
-                a1 : 33
-            },{
-                a1 : 11
-            },{
-                a1 : 233577
-            },{
-                a1 : 123
-            },{
-                a1 : "wefgf324"
-            },{
-                a1 : 33
-            },{
-                a1 : 33345
-            },{
-                a1 : 234535
-            },{
-                a1 : 32343
-            },{
-                a1 : 3345
-            },{
-                a1 : 3643
-            },{
-                a1 : 3387
-            },{
-                a1 : 345345435
-            },{
-                a1 : 34533
-            },{
-                a1 : 3382
-            },{
-                a1 : 345345
-            },{
-                a1 : 33356
-            },{
-                a1 : 32133
-            },{
-                a1 : 3378
-            },{
-                a1 : 234234234
-            },{
-                a1 : 33
-            }
-        ],
         defaultColumn: {//column基本属性
             field: '',//字段名
             title: '',//标题
@@ -56,7 +9,34 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
             sortFn: avalon.filters.orderBy,
             formatter: avalon.noop//格式化函数
         },
-        initColumns: function(columns){
+        getElementsByTagName: function (dom, tag) {
+            var result = [];
+            if(dom && dom.innerHTML) {
+                var table = document.createElement('table');
+                table.innerHTML = dom.innerHTML;
+                result = table.getElementsByTagName(tag);
+            }
+            return result;
+        },
+        initColumnsFromFrontPage: function (vm, dom) {
+            var columns = [];
+            var children = this.getElementsByTagName(dom, 'th');
+            avalon.each(children, function(i,v){
+                var column = {};
+                for(var key in v.attributes){
+                    v.hasOwnProperty(key) && key !== 'length' && (column[key] = v.attributes[key]);
+                }
+                if(!column['field']){
+                    column['field'] = avalon.makeHashCode('f');
+                }
+                if(!column['title']){
+                    column['title'] = (avalon(v.textContent) == 'string') ? v.textContent : v.innerText;
+                }
+                columns.push(column);
+            });
+            this.initColumns(vm, columns);
+        },
+        initColumns: function(vm, columns){
             for(var i = 0, len = columns.length, column; i < len; i++){
                 column = columns[i];
                 for(var key in this.defaultColumn){
@@ -76,14 +56,21 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                     }
                 }
             }
-            return columns;
+            vm.columns = columns;
         },
         //处理每一行数据
-        extendRowsData: function (data){
+        extendRowsData: function (data, fields){
             var obj = {
                 _selected: false
             };
-            for(var i = 0, row; row = data[i++];){
+            for(var i = 0, row; row = data[i]; i++){
+                if(avalon.type(row) === 'array'){
+                    var r = {};
+                    avalon.each(row, function (i, v) {
+                        r[fields[i]] = v;
+                    });
+                    data[i] = row = r;
+                }
                 for(var j in obj){
                     if(row[j] === undefined){
                         row[j] = obj[j];
@@ -92,13 +79,30 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
             }
             return data;
         },
-        //初始化前台分页数据
-        initFrontPageData: function(vm){
-            if(vm.url) return;
-            var frontPageData = this.testData;
-            frontPageData = this.extendRowsData(frontPageData);
-            vm.data[vm.$totalKey] = frontPageData.length;
-            vm.data[vm.$rowsKey] = frontPageData;
+        //初始化前台数据
+        initDataFrontPage: function(vm, dom){
+            var pageData = [];
+            var children = this.getElementsByTagName(dom, 'tr');
+            avalon.each(children, function(i,v){
+                var tds = v.childNodes;
+                var data = [];
+                avalon.each(tds, function (j, td) {
+                    if(td.nodeName === 'TD'){
+                        data.push((avalon(td.textContent) == 'string') ? td.textContent : td.innerText);
+                    }
+                });
+                data.length && pageData.push(data);
+            });
+            this.initData(vm, pageData);
+        },
+        //初始化数据
+        initData: function (vm, pageData) {
+            var fields = vm.columns.map(function (item) {
+                return item.field;
+            });
+            pageData = this.extendRowsData(pageData, fields);
+            vm.data[vm.$totalKey] = pageData.length;
+            vm.data[vm.$rowsKey] = pageData;
         },
         //更新分页信息
         updatePagination: function(vm){
@@ -121,17 +125,36 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 }
             }
         },
-        loadDataByPage: function(vm, page, cb){
+        loadDataByPage: function(vm, page){
             if(!vm.url){
-                this.dealFrontPageData(vm, page, cb);
+                this.dealFrontPageData(vm, page);
             }else{
-                //this.ajaxLoad(vm, page, cb);
+                this.ajaxLoad(vm, page);
             }
         },
-        dealFrontPageData: function(vm, page, cb){
+        dealFrontPageData: function(vm, page){
             vm.currentPage = vm.changePage = page;
             this.updatePagination(vm);
-            cb && cb();
+        },
+        ajaxLoad: function(vm, page, opt){
+            avalon.mix(vm.$queryParams, opt);
+            avalon.ajax(avalon.mix(vm.$queryParams, {
+                url: vm.url,
+                success: function(data){
+                    if(!data){//错误
+                        vm.onLoadError();
+                        return;
+                    }
+                    if(avalon.type(data) === 'array'){
+                        vm.data[vm.$totalKey] = data.length;
+                        this.dealFrontPageData(vm, page);//前台分页
+                    }else{
+                    }
+                }.bind(this),
+                error: function () {
+                    vm.onLoadError();
+                }.bind(this)
+            }));
         }
     };
     avalon.component('ms-grid', {
@@ -149,9 +172,13 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 total : 0,
                 rows : []
             },
+            $frontPageData: [],
             sort: function(column){
                 if(column.sort){
                     var order;
+                    avalon.each(this.columns, function (i, c) {
+                        c != column && (c.sortOrder = '');
+                    });
                     if(column.sortOrder === 'down'){
                         column.sortOrder = 'up'; order = 1;
                     }else{
@@ -237,13 +264,29 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 }
                 grid.loadDataByPage(this, to || 1);
             },
-            onInit: function () {
-                grid.initFrontPageData(this);
-                this.columns = grid.initColumns([
-                    {field: 'a1',title: 'a1', sort: true},
-                    {field: 'a2',title: 'a2'},
-                    {field: 'a3',title: 'a3'}
-                ]);
+            //ajax属性
+            url: '',
+            $queryParams: {},
+            load: function(param){
+                grid.ajaxLoad(this, 1, param || {});
+            },
+            reload: function(){
+                grid.ajaxLoad(this, this.currentPage);
+            },
+            //hook
+            onInit: function (evt) {
+                if(!this.columns || !this.columns.length){
+                    grid.initColumnsFromFrontPage(this, evt.target);//尝试从dom获取
+                }else{
+                    grid.initColumns(this, this.columns.$model);
+                }
+                if(!this.url){
+                    if(!this.$frontPageData || !this.$frontPageData.length){
+                        grid.initDataFrontPage(this, evt.target);//尝试从dom获取
+                    }else{
+                        grid.initData(this, this.$frontPageData);
+                    }
+                }
             },
             onReady: function(){
                 this.$watch('pageSize',function(val){
@@ -255,7 +298,6 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
             onLoadSuccess: avalon.noop,
             onLoadError: avalon.noop,
             onSelect: avalon.noop
-
         }
     });
 });

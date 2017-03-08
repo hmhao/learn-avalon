@@ -17,7 +17,8 @@
             </tr>
             </thead>
             <tbody>
-                <tr :for="(rowIndex, item) in @data[@$rowsKey]" :class="{'info':item._selected}" :click='@toggleSelect(item)'>
+                <tr :for="(rowIndex, item) in @data[@$rowsKey] | limitBy(@pageSize, @start-1)"
+                    :class="{'info':item._selected}" :click='@toggleSelect(item)'>
                     <td :for="col in @columns">
                         <div :html="@dealValue(item, col, rowIndex)"></div>
                     </td>
@@ -56,7 +57,7 @@
             </div>
             <div class="pull-right">
                 <span>当前第{{@currentPage}}页,{{@start}}~{{@end}}条,共{{@data[@$totalKey]}}条</span>
-                <select class="form-control span1" :duplex="@pageSize">
+                <select class="form-control span1" :duplex-number="@pageSize">
                     <option :for="el in @pageSizeArr" :attr="{value: el}">{{el}}</option>
                 </select>
             </div>

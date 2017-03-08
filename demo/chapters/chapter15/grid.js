@@ -45,8 +45,6 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 a1 : 234234234
             },{
                 a1 : 33
-            },{
-                a1 : 33
             }
         ],
         defaultColumn: {//column基本属性
@@ -59,8 +57,13 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
             formatter: avalon.noop//格式化函数
         },
         initColumns: function(columns){
-            avalon.each(columns, function (i, column) {
-                column = avalon.mix({}, this.defaultColumn, column);
+            for(var i = 0, len = columns.length, column; i < len; i++){
+                column = columns[i];
+                for(var key in this.defaultColumn){
+                    if(column[key] === undefined){
+                        column[key] = this.defaultColumn[key];
+                    }
+                }
                 if(column.formatter !== avalon.noop){
                     if(column.formatter === 'datetime'){
                         column.formatter = function(v){
@@ -72,7 +75,8 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                         };
                     }
                 }
-            }.bind(this));
+            }
+            return columns;
         },
         //处理每一行数据
         extendRowsData: function (data){
@@ -91,8 +95,6 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
         //初始化前台分页数据
         initFrontPageData: function(vm){
             if(vm.url) return;
-            /*var frontPageData = vm.$frontPageData;
-            if(!frontPageData) return;*/
             var frontPageData = this.testData;
             frontPageData = this.extendRowsData(frontPageData);
             vm.data[vm.$totalKey] = frontPageData.length;
@@ -119,6 +121,18 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 }
             }
         },
+        loadDataByPage: function(vm, page, cb){
+            if(!vm.url){
+                this.dealFrontPageData(vm, page, cb);
+            }else{
+                //this.ajaxLoad(vm, page, cb);
+            }
+        },
+        dealFrontPageData: function(vm, page, cb){
+            vm.currentPage = vm.changePage = page;
+            this.updatePagination(vm);
+            cb && cb();
+        }
     };
     avalon.component('ms-grid', {
         template: tpl,
@@ -216,23 +230,26 @@ define(['avalon', 'text!./grid.html'], function(avalon, tpl) {
                 }
             },
             $pageProxy: function (evt, p) {
-                var cur = this.toPage(p);
+                var to = this.toPage(p);
                 if (this.$disable[p] || p === this.currentPage) {
                     evt.preventDefault();
                     return; //disabled, active不会触发
                 }
+                grid.loadDataByPage(this, to || 1);
             },
             onInit: function () {
                 grid.initFrontPageData(this);
-                grid.updatePagination(this);
-                this.columns = [
+                this.columns = grid.initColumns([
                     {field: 'a1',title: 'a1', sort: true},
                     {field: 'a2',title: 'a2'},
                     {field: 'a3',title: 'a3'}
-                ];
-                grid.initColumns(this.columns);
+                ]);
             },
             onReady: function(){
+                this.$watch('pageSize',function(val){
+                    grid.loadDataByPage(this, 1);
+                });
+                grid.loadDataByPage(this, 1);
             },
             //事件回调声明占位
             onLoadSuccess: avalon.noop,

@@ -1,0 +1,33 @@
+<div>
+    <div class="row text-center" :if="@title">
+        <h3 :html="@title"></h3>
+    </div>
+    <div class="row">
+        <table class="table" :class='@$style'>
+            <thead>
+            <tr>
+                <th :for="el in @columns" :css="{width:el.width}" :click='@sort(el)'>
+                    <div>
+                        {{el.title}}
+                        <span class="pull-right" :visible="el.sortOrder">
+                            <i :class="['icon-caret-' + el.sortOrder]"></i>
+                        </span>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr :for="(rowIndex, item) in @data[@$rowsKey]" :class="{'info':item._selected}" :click='@toggleSelect(item)'>
+                    <td :for="col in @columns">
+                        <div :html="@dealValue(item, col, rowIndex)"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 :visible='!@data || !@data[@$totalKey] || @data[@$rowsKey].length === 0'
+            class="muted text-center">暂无数据</h2>
+    </div>
+    <div class="row">
+
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<li MS_FOR class="list-group-item tree-node" :class="el.active">
+    <i :if="el.nodes && el.nodes.length" :click="@toggleState(el)"
+       :class="el.state==='collapse' ? el.collapseIcon : el.expandIcon"></i>
+    <i :if="el.checkbox" :click="@toggleCheck(el)"
+       :class="[el.checked ? el.checkedIcon : el.uncheckedIcon, 'tree-checkbox' + el.checked]" ></i>
+    <span class="tree-node-content" :class="{'tree-node-select':el.selected}" :click="@toggleSelect(el)" >
+        <i class="icon" :class="el.nodeIcon"></i>
+		<span class="tree-text">{{el.text}}</span>
+	</span>
+    <ul :if="el.nodes && el.nodes.length" :visible="el.state==='expand'" :html="@getNodesTpl(el)"></ul>
+</li>

@@ -5,17 +5,16 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
         defaultTreeNode: {
             nodes: [],
             $path: '',
-            nodeIcon: false,
-            checkbox: false,
-            expandIcon: '',
-            collapseIcon: '',
-            checkedIcon: 'icon-check',
-            uncheckedIcon: 'icon-unchecked',
+            $nodeIcon: '',
+            $expandIcon: '',
+            $collapseIcon: '',
+            $checkbox: false,
+            $checkedIcon: '',
+            $uncheckedIcon: '',
             text: '',
             loading: false,
             checked: 0,
             selected: false,
-            active: false,
             loaded: true,//
             state: ''
         },
@@ -51,14 +50,29 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                 }
             }.bind(this));
         },
-        eachParents: function(nodes, target, cb){//遍历target的所有父节点，若传入回调则执行回调
+        getNode: function(nodes, path){//根据path获取节点
+            path = path.split('');
+            var node, i, len;
+            for(i = 0, len = path.length; i < len; i++){
+                node = nodes[path[i]];
+                if(node && node.nodes && node.nodes.length){
+                    nodes = node.nodes;
+                } else {
+                    break;
+                }
+            }
+            return i == len - 1 ? node : null;
+        },
+        getParents: function(nodes, target){//获取target的所有父节点
+            var parents = [];
             var path = target.$path.split('');
             for(var i = 0, len = path.length, index, node; i < len - 1; i++){
                 index = path[i];
                 node = nodes[index];
-                cb && cb(node);
+                parents.push(node);
                 nodes = node.nodes;
             }
+            return parents;
         }
     };
 
@@ -66,17 +80,31 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
         template: '<ul class="tree">' + rootTpl + '</ul>',
         defaults: {
             nodes: [],//节点
-            nodeIcon: 'icon-bookmark',//节点是否带图标
-            checkbox: true,//节点是否带checkbox
-            expandIcon: 'icon-minus',//展开图标
-            collapseIcon: 'icon-plus',//收起图标
+            $nodeIcon: '',//节点是否带图标
+            $checkbox: false,//节点是否带checkbox
+            $checkedIcon: 'icon-check',//选中的复选框图标
+            $uncheckedIcon: 'icon-unchecked',//没选中的复选框图标
+            $expandIcon: 'icon-minus',//展开图标
+            $collapseIcon: 'icon-plus',//收起图标
             $cascadeCheck: true,//是否级联检查
             $lastSelect: null,
-            getNodesTpl: function (el) {
+            $getNodesTpl: function (el) {
                 return nodesTpl;
             },
             toggleState: function (el) {
-                el.state = el.state == 'collapse' ? 'expand' : 'collapse';
+                if(el.state === 'collapse'){
+                    if(this.onBeforeExpand(el) === false){
+                        return;
+                    }
+                    el.state = 'expand';
+                    this.onExpand(el);
+                }else{
+                    if(this.onBeforeCollapse(el) === false){
+                        return;
+                    }
+                    el.state = 'collapse';
+                    this.onCollapse(el);
+                }
             },
             toggleCheck: function(el, checked){
                 if(checked === undefined){
@@ -89,6 +117,7 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                 }else{
                     el.checked = checked;
                 }
+                checked === 1 && this.onCheck(el);
                 if(this.$cascadeCheck){
                     if(el.nodes.length){
                         //勾选或反选所有子节点
@@ -97,10 +126,25 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                         });
                     }
                     if(el.$path.length > 1){
-                        //如果是勾选 则将所有父节点置为预选状态
-                        tree.eachParents(this.nodes, el, function(node){
-                            node.checked = checked === 1 ? 2 : 0;
-                        });
+                        var parents = tree.getParents(this.nodes, el);
+                        if(checked === 1){
+                            //如果是勾选 则将所有父节点置为预选状态
+                            avalon.each(parents, function(i, node){
+                                node.checked = 2;
+                            });
+                        }else{
+                            avalon.each(parents.reverse(), function (i, node) {
+                                var flag = 0;
+                                //遍历所有父节点 查看其下所有子节点是否都没有勾选，若是则置为反选
+                                tree.eachNode(node.nodes, function (n) {
+                                    if(n.checked === 1){
+                                        flag = 2;
+                                        return false;
+                                    }
+                                });
+                                node.checked = flag;
+                            });
+                        }
                     }
                 }
             },
@@ -114,6 +158,15 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                 if(this.$lastSelect === el) return;
                 el.selected = true;
                 this.onSelect(this.$lastSelect = el);
+            },
+            getNode: function(path){
+                return tree.getNode(this.nodes, path);
+            },
+            getParents: function(target){
+                return tree.getParents(this.nodes, target);
+            },
+            getSelected: function () {
+                return this.$lastSelect;
             },
             //hook
             onInit: function (evt) {
@@ -141,16 +194,16 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
 
             },
             //事件回调声明占位
-            onBeforeSelect : avalon.noop,
-            onSelect : avalon.noop,
-            onBeforeExpand : avalon.noop,
-            onExpand : avalon.noop,
-            onBeforeCollapse : avalon.noop,
-            onCollapse : avalon.noop,
-            onBeforeLoad : avalon.noop,
-            onLoadSuccess : avalon.noop,
-            onLoadError : avalon.noop,
-            onLoadComplete : avalon.noop,
+            onBeforeSelect: avalon.noop,
+            onSelect: avalon.noop,
+            onBeforeExpand: avalon.noop,
+            onExpand: avalon.noop,
+            onBeforeCollapse: avalon.noop,
+            onCollapse: avalon.noop,
+            onBeforeLoad: avalon.noop,
+            onLoadSuccess: avalon.noop,
+            onLoadError: avalon.noop,
+            onLoadComplete: avalon.noop,
             onCheck: avalon.noop
         }
     });

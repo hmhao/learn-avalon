@@ -10,25 +10,24 @@ define(['avalon', 'text!./chapter16.html', './tree'], function(avalon, tpl) {
             $uncheckedIcon: 'icon-ok-circle',//没选中的复选框图标
             $expandIcon: 'icon-chevron-down',//展开图标
             $collapseIcon: 'icon-chevron-right',//收起图标
-            nodes:[
-                {
-                    'text': 'node1'
-                }, {
-                    'text': 'node2',
+            nodes:[{
+                'text': 'node1'
+            }, {
+                'text': 'node2',
+                'state': 'expand',
+                'nodes': [{
+                    'text': 'node21',
                     'nodes': [{
-                        'text': 'node21',
-                        'nodes': [{
-                            'text': 'node211'
-                        },{
-                            'text': 'node212'
-                        }]
+                        'text': 'node211'
                     },{
-                        'text': 'node22'
+                        'text': 'node212'
                     }]
-                }, {
-                    'text': 'node3'
-                }
-            ]
+                },{
+                    'text': 'node22'
+                }]
+            }, {
+                'text': 'node3'
+            }]
         },
         getSelected: function () {
             avalon.log(avalon.vmodels.mytree.getSelected());
@@ -53,6 +52,15 @@ define(['avalon', 'text!./chapter16.html', './tree'], function(avalon, tpl) {
         path: '100',
         getNode: function () {
             avalon.log(avalon.vmodels.mytree.getNode(this.path));
+        },
+        expandTo : function(){//展开到指定节点
+            var mytree = avalon.vmodels.mytree;
+            var target = mytree.getNode(this.path);
+            var parents = mytree.getParents(target);
+            avalon.each(parents,function(i, el){
+                mytree.expandNode(el);
+            });
+            mytree.toggleSelect(target, true)
         }
     });
 

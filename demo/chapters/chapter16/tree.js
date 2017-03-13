@@ -61,7 +61,7 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                     break;
                 }
             }
-            return i == len - 1 ? node : null;
+            return i >= len - 1 ? node : null;
         },
         getParents: function(nodes, target){//获取target的所有父节点
             var parents = [];

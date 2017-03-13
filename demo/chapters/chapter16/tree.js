@@ -93,17 +93,9 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
             },
             toggleState: function (el) {
                 if(el.state === 'collapse'){
-                    if(this.onBeforeExpand(el) === false){
-                        return;
-                    }
-                    el.state = 'expand';
-                    this.onExpand(el);
+                    this.expandNode(el);
                 }else{
-                    if(this.onBeforeCollapse(el) === false){
-                        return;
-                    }
-                    el.state = 'collapse';
-                    this.onCollapse(el);
+                    this.collapseNode(el);
                 }
             },
             toggleCheck: function(el, checked){
@@ -159,6 +151,20 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
                 el.selected = true;
                 this.onSelect(this.$lastSelect = el);
             },
+            expandNode: function (el) {
+                if(this.onBeforeExpand(el) === false){
+                    return;
+                }
+                el.state = 'expand';
+                this.onExpand(el);
+            },
+            collapseNode: function (el) {
+                if(this.onBeforeCollapse(el) === false){
+                    return;
+                }
+                el.state = 'collapse';
+                this.onCollapse(el);
+            },
             getNode: function(path){
                 return tree.getNode(this.nodes, path);
             },
@@ -168,27 +174,11 @@ define(['avalon', 'text!./tree.html', 'css!./tree.css', './mmRequest'], function
             getSelected: function () {
                 return this.$lastSelect;
             },
+            $url: '',//异步获取数据的url
+            $queryParams: {},
             //hook
             onInit: function (evt) {
-                this.nodes.pushArray(tree.initTreeNode(this, [
-                    {
-                        'text': 'node1'
-                    }, {
-                        'text': 'node2',
-                        'nodes': [{
-                            'text': 'node21',
-                            'nodes': [{
-                                'text': 'node211'
-                            },{
-                                'text': 'node212'
-                            }]
-                        },{
-                            'text': 'node22'
-                        }]
-                    }, {
-                        'text': 'node3'
-                    }
-                ]));
+                this.nodes = tree.initTreeNode(this, this.nodes.$model);
             },
             onReady: function(evt){
 

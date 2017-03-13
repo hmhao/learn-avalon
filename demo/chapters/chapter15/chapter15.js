@@ -18,8 +18,8 @@ define(['avalon', 'text!./chapter15.html', './grid'], function(avalon, tpl) {
             is: 'ms-grid',
             id: 'mygrid',
             title: 'test',
-            url: './chapters/chapter15/array.json',
-            //url: './chapters/chapter15/object.json',
+            $url: './chapters/chapter15/array.json',
+            //$url: './chapters/chapter15/object.json',
             columns: [
                 {field: 'a1',title: 'a1', sort: true},
                 {field: 'a2',title: 'a2'},

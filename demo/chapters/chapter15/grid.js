@@ -131,7 +131,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
             }
         },
         loadDataByPage: function(vm, page){
-            if(!vm.url){
+            if(!vm.$url){
                 this.initData(vm, null, page);
             }else{
                 this.ajaxLoad(vm, page);
@@ -140,7 +140,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
         ajaxLoad: function(vm, page, opt){
             avalon.mix(vm.$queryParams, opt);
             var opts = avalon.mix(vm.$queryParams, {
-                url: vm.url,
+                url: vm.$url,
                 success: function(data){
                     if(!data){//错误
                         vm.onLoadError();
@@ -169,7 +169,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
             $style: ['table-striped', 'table-bordered', 'table-hover'],//表格样式
             $multiple: true,//是否允许多选
             $lastSelect: null,//前一个选择
-            title: '',
+            $title: '',
             columns: [],
             data : {
                 total : 0,
@@ -235,10 +235,10 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
             totalPages: 1,
             currentPage: 1,
             changePage: 1,
-            start : 0,
-            end : 0,
-            pageSize : 5,
-            pageSizeArr : [5,10,15,20,25,30],
+            start: 0,
+            end: 0,
+            pageSize: 5,
+            $pageSizeArr: [5,10,15,20,25,30],
             isDisabled: function (name, page) {
                 return this.$disable[name] = (this.currentPage === page);
             },
@@ -267,7 +267,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                 grid.loadDataByPage(this, to || 1);
             },
             //ajax属性
-            url: '',
+            $url: '',
             $queryParams: {},
             load: function(param){
                 grid.ajaxLoad(this, 1, param || {});
@@ -282,7 +282,7 @@ define(['avalon', 'text!./grid.html', './mmRequest'], function(avalon, tpl) {
                 }else{
                     grid.initColumns(this, this.columns.$model);
                 }
-                if(!this.url){
+                if(!this.$url){
                     if(!this.$frontPageData || !this.$frontPageData.length){
                         grid.initDataFrontPage(this, evt.target, 1);//尝试从dom获取
                     }else{

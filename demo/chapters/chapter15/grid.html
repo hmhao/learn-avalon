@@ -1,6 +1,6 @@
 <div>
-    <div class="text-center" :if="@title">
-        <h3 :html="@title"></h3>
+    <div class="text-center" :if="@$title">
+        <h3 :html="@$title"></h3>
     </div>
     <div>
         <table class="table" :class='@$style'>
@@ -57,7 +57,7 @@
         <div class="pull-right">
             <span>当前第{{@currentPage}}页,{{@start}}~{{@end}}条,共{{@data[@$totalKey]}}条</span>
             <select class="form-control span1" :duplex-number="@pageSize">
-                <option :for="el in @pageSizeArr" :attr="{value: el}">{{el}}</option>
+                <option :for="el in @$pageSizeArr" :attr="{value: el}">{{el}}</option>
             </select>
         </div>
     </div>

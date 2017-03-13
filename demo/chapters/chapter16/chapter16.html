@@ -6,6 +6,8 @@
         </xmp>
         <button class="btn" :click="@getSelected">获取选中项</button>
         <button class="btn" :click="@getParents">获取选中项的所有父节点</button>
+        <button class="btn" :click="@expand">展开选中项的子项</button>
+        <button class="btn" :click="@collapse">收起选中项的子项</button>
         <br>
         <div class="input-prepend input-append">
             <span class="add-on">路径</span>

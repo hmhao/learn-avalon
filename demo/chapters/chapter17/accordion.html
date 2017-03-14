@@ -1,0 +1,23 @@
+<div class="accordion">
+    <div class="accordion-group" :for="(i,el) in @data">
+        <div class="accordion-heading" :click="@selectHeader(el)" :class="{active:el.selected}">
+            <a class="accordion-toggle" href="javascript:void(0)">
+                <i :if="el.icon" :class="el.icon"></i>
+                {{el.title}}
+                <span class="pull-right" :class="[el.selected ? el.$expandIcon : el.$collapseIcon]"></span>
+            </a>
+        </div>
+        <div class="accordion-body collapse" :class="{in: el.selected}">
+            <ul :if="el.nodes && el.nodes.length > 0" class="nav nav-list">
+                <li :for="(j,node) in el.nodes" :class="{active:node.selected}" :click="@selectNode(node)">
+                    <a href="javascript:void(0)">
+                        <i :if="node.icon" :class="node.icon"></i>
+                        {{node.text}}
+                        <span class="marrow" :visible="node.selected"></span>
+                    </a>
+                </li>
+            </ul>
+            <div class="accordion-inner" :if="!el.nodes || el.nodes.length === 0" :html="el.content"></div>
+        </div>
+    </div>
+</div>

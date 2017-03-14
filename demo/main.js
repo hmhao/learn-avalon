@@ -26,7 +26,8 @@ require(['avalon', "domReady!"], function() {
             chapter13:'组件:分页',
             chapter14:'组件:切换标签页',
             chapter15:'组件:表格',
-            chapter16:'组件:树形'
+            chapter16:'组件:树形',
+            chapter17:'组件:accordion'
         },
         selected:'',
         code: '',
@@ -43,5 +44,5 @@ require(['avalon', "domReady!"], function() {
         }
     });
     avalon.scan(document.body);
-    model.router('chapter16');
+    model.router('chapter17');
 });

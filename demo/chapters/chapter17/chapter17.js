@@ -5,7 +5,7 @@ define(['avalon', 'text!./chapter17.html', './accordion'], function(avalon, tpl)
             is: 'ms-accordion',
             id: 'myaccordion',
             //$multiple: false,
-            data: [{
+            /*data: [{
                 title: 'a1',
                 icon: 'icon-bell-alt',
                 nodes: [{
@@ -25,7 +25,7 @@ define(['avalon', 'text!./chapter17.html', './accordion'], function(avalon, tpl)
             },{
                 title: 'content' ,
                 content: '<h1>testtest</h1>'
-            }]
+            }]*/
         },
         getSelected: function () {
             avalon.log(avalon.vmodels.myaccordion.getSelected());

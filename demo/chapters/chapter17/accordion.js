@@ -18,7 +18,7 @@ define(['avalon', 'text!./accordion.html', 'css!./accordion.css'], function(aval
             var option = isNode ? this.defaultNode : this.defaultHeader;
             avalon.each(data, function (i, item) {
                 for(var key in option){
-                    if(item[key] === undefined){
+                    if(item[key] === undefined || item[key] === ''){
                         item[key] = vm[key] || option[key];
                     }
                 }
@@ -27,6 +27,29 @@ define(['avalon', 'text!./accordion.html', 'css!./accordion.css'], function(aval
                 }
             }.bind(this));
             return data;
+        },
+        //初始化前台数据
+        initDataFrontPage: function(vm, dom){
+            var pageData = [];
+            var fragment;
+            if(dom && dom.innerHTML) {
+                fragment = document.createElement('div');
+                fragment.innerHTML = dom.innerHTML;
+            }
+            if(fragment && fragment.children){
+                avalon.each(fragment.children, function(i,v){
+                    var data = {
+                        title: v.title,
+                        content: v.innerHTML,
+                        icon: v.getAttribute('data-icon') || '',
+                        $expandIcon: v.getAttribute('data-expand-icon') || '',
+                        $collapseIcon: v.getAttribute('data-collapse-icon') || ''
+                    };
+                    pageData.push(data);
+                });
+            }
+
+            return this.initData(vm, pageData);
         }
     };
 
@@ -98,7 +121,9 @@ define(['avalon', 'text!./accordion.html', 'css!./accordion.css'], function(aval
             },
             //hook
             onInit: function (evt) {
-                if(this.data){
+                if(!this.data || !this.data.length){
+                    this.data = accordion.initDataFrontPage(this, evt.target);
+                }else{
                     this.data = accordion.initData(this, this.data.$model);
                 }
             },
